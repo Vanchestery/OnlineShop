@@ -361,3 +361,22 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ─── OnlineShop-specific ──────────────────────────────────────────────────────
+# Serilog файлы логов (создаются рядом с бинарниками во время работы приложения)
+logs/
+**/logs/
+
+# Локальные оверрайды настроек, которые не должны попадать в git
+appsettings.Local.json
+appsettings.*.Local.json
+
+# Docker overrides
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Кеши JetBrains Rider, если кто-то им пользуется
+.idea/
+
+# Visual Studio Code, если переключаешься между IDE
+.vscode/

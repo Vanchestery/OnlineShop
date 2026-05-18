@@ -1,0 +1,10 @@
+/* Кастомные стили проекта. Базовый дизайн — Bootstrap 5 через CDN (см. _Layout). */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
