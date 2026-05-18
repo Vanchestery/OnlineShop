@@ -1,0 +1,39 @@
+# .github/workflows/ci.yml — GitHub Actions Continuous Integration.
+#
+# Что это: каждый раз когда ты пушишь в любую ветку или открываешь PR в main,
+# GitHub берёт виртуалку (runner) и выполняет шаги ниже. Если хоть один шаг
+# упал — на PR появится красная галочка, мерж не разрешён. Это страховка
+# от "у меня собирается, а в чистой среде — нет".
+
+name: CI
+
+on:
+  push:
+    branches: [ "**" ]        # любой push в любую ветку
+  pull_request:
+    branches: [ main ]        # любой PR с целью main
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest    # бесплатная Linux-виртуалка от GitHub
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore OnlineShop.sln
+
+      - name: Build (Release)
+        run: dotnet build OnlineShop.sln --configuration Release --no-restore
+
+      - name: Test
+        # Тестов пока нет — шаг пройдёт без ошибок, потому что dotnet test
+        # на solution без тестовых проектов отрабатывает успешно.
+        # Когда добавим OnlineShop.Tests — они будут автоматически запущены.
+        run: dotnet test OnlineShop.sln --configuration Release --no-build --verbosity normal
