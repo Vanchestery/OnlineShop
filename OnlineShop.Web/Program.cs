@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Core.Extensions;
 using OnlineShop.Db;
 using OnlineShop.Db.Extensions;
 using OnlineShop.Db.Models;
@@ -10,6 +11,9 @@ builder.Services.AddControllersWithViews();
 
 // Слой данных: DbContext, хранилища, IdentityInitializer (без Identity-cookies).
 builder.Services.AddDataLayer(builder.Configuration);
+
+// Слой бизнес-логики: AutoMapper + сервисы.
+builder.Services.AddCoreLayer();
 
 // Identity-регистрация — на Web-слое, потому что использует shared framework
 // (cookies, authentication scheme) который недоступен в class library.
