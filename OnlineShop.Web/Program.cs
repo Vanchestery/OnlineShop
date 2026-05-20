@@ -1,12 +1,37 @@
+using OnlineShop.Db;
+using OnlineShop.Db.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// MVC: контроллеры + представления. AddRazorRuntimeCompilation добавим позже,
-// когда понадобится править .cshtml без перезапуска приложения (Фаза 4).
 builder.Services.AddControllersWithViews();
+
+// Слой данных: DbContext, Identity, хранилища, IdentityInitializer.
+builder.Services.AddDataLayer(builder.Configuration);
 
 var app = builder.Build();
 
-// Конвейер обработки HTTP-запросов.
+// Применяем миграции и сидим данные при старте.
+// Для dev — удобно: запустил, всё уже есть. В проде так делать не стоит —
+// миграции должны накатываться отдельной командой/CI-job.
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        var db = services.GetRequiredService<ApplicationDbContext>();
+        await db.Database.MigrateAsync();
+
+        var initializer = services.GetRequiredService<IdentityInitializer>();
+        await initializer.InitializeAsync();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Ошибка при инициализации БД при старте приложения");
+        throw;
+    }
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -15,11 +40,13 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();   // отдача wwwroot
+app.UseStaticFiles();
 
 app.UseRouting();
 
-// Authentication/Authorization добавим в Фазе 5 (после подключения Identity).
+// Порядок важен: Authentication до Authorization.
+// Authentication устанавливает HttpContext.User, Authorization его проверяет.
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
