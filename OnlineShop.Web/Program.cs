@@ -1,12 +1,31 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
 using OnlineShop.Db.Extensions;
+using OnlineShop.Db.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-// Слой данных: DbContext, Identity, хранилища, IdentityInitializer.
+// Слой данных: DbContext, хранилища, IdentityInitializer (без Identity-cookies).
 builder.Services.AddDataLayer(builder.Configuration);
+
+// Identity-регистрация — на Web-слое, потому что использует shared framework
+// (cookies, authentication scheme) который недоступен в class library.
+// Параметры паролей и юзеров — мягкие для pet-проекта.
+builder.Services.AddIdentity<User, Role>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedEmail = false;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
 var app = builder.Build();
 

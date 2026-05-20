@@ -1,16 +1,16 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Storage;
 
 namespace OnlineShop.Db.Extensions;
 
 /// <summary>
-/// Точка входа для регистрации всего слоя данных в DI.
-/// Program.cs делает один вызов: builder.Services.AddDataLayer(builder.Configuration).
+/// Точка входа для регистрации слоя данных в DI: DbContext, хранилища, инициализатор.
+/// Identity (AddIdentity) регистрируется в Web-слое, потому что требует
+/// shared framework Microsoft.AspNetCore.App (cookies, authentication scheme),
+/// который не доступен в обычной class library.
 /// </summary>
 public static class ServiceCollectionExtensions
 {
@@ -24,19 +24,6 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
 
-        // Параметры паролей и юзеров — мягкие для pet-проекта.
-        services.AddIdentity<User, Role>(options =>
-        {
-            options.Password.RequireDigit = true;
-            options.Password.RequiredLength = 6;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequireLowercase = false;
-            options.User.RequireUniqueEmail = true;
-            options.SignIn.RequireConfirmedEmail = false;
-        })
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
 
         // Хранилища
         services.AddScoped<IProductsStorage, ProductsStorage>();
