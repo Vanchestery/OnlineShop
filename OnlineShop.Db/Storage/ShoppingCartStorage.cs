@@ -44,6 +44,13 @@ public class ShoppingCartStorage : IShoppingCartStorage
         return cart;
     }
 
+    public Task<int> GetItemCountAsync(Guid cartId, CancellationToken ct = default) =>
+        _db.CartItems
+            .Where(i => i.CartId == cartId)
+            .SumAsync(i => i.Quantity, ct);
+    // SumAsync на пустой выборке возвращает 0 — для int-селектора это поведение EF
+    // (в SQL SUM(NULL) = NULL, но EF приводит к 0). Удобно — не надо коалесить.
+
     public async Task AddItemAsync(Guid cartId, Guid productId, int quantity, CancellationToken ct = default)
     {
         if (quantity <= 0) throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be positive.");

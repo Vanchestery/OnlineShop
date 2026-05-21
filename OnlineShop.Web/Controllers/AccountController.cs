@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
+using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels.Auth;
 
 namespace OnlineShop.Web.Controllers;
@@ -14,17 +15,20 @@ public class AccountController : Controller
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IOrderService _orderService;
+    private readonly ICartService _cartService;
     private readonly ILogger<AccountController> _logger;
 
     public AccountController(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
         IOrderService orderService,
+        ICartService cartService,
         ILogger<AccountController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _orderService = orderService;
+        _cartService = cartService;
         _logger = logger;
     }
 
@@ -65,6 +69,9 @@ public class AccountController : Controller
         await _userManager.AddToRoleAsync(user, RoleNames.User);
         await _signInManager.SignInAsync(user, isPersistent: false);
 
+        // Если в анонимной куке была корзина с товарами — перенесём в пользовательскую.
+        await TryMergeAnonymousCartAsync(user.Id, ct);
+
         _logger.LogInformation("Зарегистрирован пользователь {Email}", user.Email);
         return RedirectToAction(nameof(HomeController.Index), "Home");
     }
@@ -95,7 +102,12 @@ public class AccountController : Controller
             return View(model);
         }
 
-        // TODO Phase 6: здесь будет merge анонимной корзины (если есть кука) в пользовательскую.
+        // Merge анонимной корзины в пользовательскую (если в куке была корзина).
+        var loggedUser = await _userManager.FindByEmailAsync(model.Email);
+        if (loggedUser is not null)
+        {
+            await TryMergeAnonymousCartAsync(loggedUser.Id, ct);
+        }
 
         _logger.LogInformation("Вход пользователя {Email}", model.Email);
 
@@ -185,4 +197,33 @@ public class AccountController : Controller
     [HttpGet]
     [AllowAnonymous]
     public IActionResult AccessDenied() => View();
+
+    // ─── Helpers ──────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Если в куке shop_cart был Id анонимной корзины — переносим её содержимое
+    /// в пользовательскую корзину и удаляем cookie. Тихо игнорируем ошибки —
+    /// merge не должен ломать логин.
+    /// </summary>
+    private async Task TryMergeAnonymousCartAsync(Guid userId, CancellationToken ct)
+    {
+        if (!Request.Cookies.TryGetValue(CartContext.CookieName, out var raw)
+            || !Guid.TryParse(raw, out var anonCartId))
+        {
+            return;
+        }
+
+        try
+        {
+            await _cartService.MergeAnonymousIntoUserAsync(anonCartId, userId, ct);
+            _logger.LogInformation("Cart merge: anon {AnonId} → user {UserId}", anonCartId, userId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Cart merge failed for anon {AnonId} → user {UserId}", anonCartId, userId);
+        }
+
+        // Удаляем cookie независимо от результата merge — она больше не нужна.
+        Response.Cookies.Delete(CartContext.CookieName);
+    }
 }

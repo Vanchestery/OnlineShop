@@ -39,6 +39,15 @@ public class CartService : ICartService
         return cart.Id;
     }
 
+    public async Task<Guid> GetOrCreateForUserAsync(Guid userId, CancellationToken ct = default)
+    {
+        var cart = await _carts.GetOrCreateForUserAsync(userId, ct);
+        return cart.Id;
+    }
+
+    public Task<int> GetItemCountAsync(Guid cartId, CancellationToken ct = default) =>
+        _carts.GetItemCountAsync(cartId, ct);
+
     public async Task AddItemAsync(Guid cartId, Guid productId, int quantity, CancellationToken ct = default)
     {
         if (quantity <= 0)

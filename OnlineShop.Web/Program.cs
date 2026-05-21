@@ -4,6 +4,7 @@ using OnlineShop.Core.Extensions;
 using OnlineShop.Db;
 using OnlineShop.Db.Extensions;
 using OnlineShop.Db.Models;
+using OnlineShop.Web.Infrastructure;
 using Serilog;
 using Serilog.Formatting.Compact;
 
@@ -41,6 +42,10 @@ try
 
     // Слой бизнес-логики: AutoMapper + сервисы.
     builder.Services.AddCoreLayer();
+
+    // Доступ к HttpContext из сервисов (нужен CartContext для cookies).
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddScoped<ICartContext, CartContext>();
 
     // Identity-регистрация — на Web-слое, потому что использует shared framework
     // (cookies, authentication scheme) который недоступен в class library.

@@ -1,0 +1,88 @@
+@model OnlineShop.Web.ViewModels.Cart.CartViewModel
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+<h1 class="h3 mb-4">Корзина</h1>
+
+@if (Model.IsEmpty)
+{
+    <div class="alert alert-light text-center py-5">
+        <p class="mb-3">Корзина пуста.</p>
+        <a asp-controller="Product" asp-action="Index" class="btn btn-dark">Перейти в каталог</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th class="text-end">Цена</th>
+                    <th class="text-center">Количество</th>
+                    <th class="text-end">Подсумма</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId"
+                               class="text-decoration-none text-dark">
+                                @item.ProductName
+                            </a>
+                        </td>
+                        <td class="text-end">@item.ProductPrice.ToString("N2") ₽</td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <form asp-action="Decrease" method="post" class="d-inline">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <button type="submit" class="btn btn-outline-secondary"
+                                            title="Уменьшить">−</button>
+                                </form>
+                                <span class="btn btn-outline-secondary disabled">@item.Quantity</span>
+                                <form asp-action="Add" method="post" class="d-inline">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn btn-outline-secondary"
+                                            title="Увеличить">+</button>
+                                </form>
+                            </div>
+                        </td>
+                        <td class="text-end fw-bold">@item.Subtotal.ToString("N2") ₽</td>
+                        <td class="text-end">
+                            <form asp-action="Remove" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        title="Удалить">×</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">Итого:</td>
+                    <td class="text-end fw-bold fs-5">@Model.Total.ToString("N2") ₽</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <form asp-action="Clear" method="post">
+            <button type="submit" class="btn btn-outline-secondary"
+                    onclick="return confirm('Очистить корзину?')">
+                Очистить корзину
+            </button>
+        </form>
+        <button type="button" class="btn btn-dark btn-lg" disabled
+                title="Оформление заказа появится в Phase 7">
+            Оформить заказ
+        </button>
+    </div>
+}

@@ -13,6 +13,16 @@ public interface ICartService
     /// </summary>
     Task<Guid> CreateAnonymousAsync(CancellationToken ct = default);
 
+    /// <summary>
+    /// Получить или создать корзину для пользователя. Возвращает Id корзины.
+    /// </summary>
+    Task<Guid> GetOrCreateForUserAsync(Guid userId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Быстрый подсчёт количества товаров в корзине — для бейджа.
+    /// </summary>
+    Task<int> GetItemCountAsync(Guid cartId, CancellationToken ct = default);
+
     Task AddItemAsync(Guid cartId, Guid productId, int quantity, CancellationToken ct = default);
 
     Task DecreaseItemAsync(Guid cartId, Guid productId, CancellationToken ct = default);
