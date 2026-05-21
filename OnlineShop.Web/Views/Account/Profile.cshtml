@@ -1,0 +1,26 @@
+@model OnlineShop.Web.ViewModels.Auth.ProfileViewModel
+@{
+    ViewData["Title"] = "Профиль";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1 class="h3 mb-4">Профиль</h1>
+
+        <dl class="row">
+            <dt class="col-sm-3">Имя</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Зарегистрирован</dt>
+            <dd class="col-sm-9">@Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</dd>
+        </dl>
+
+        <div class="mt-4 d-flex gap-2">
+            <a asp-action="ChangePassword" class="btn btn-outline-dark">Сменить пароль</a>
+            <a asp-action="OrderHistory" class="btn btn-outline-secondary">Мои заказы</a>
+        </div>
+    </div>
+</div>
