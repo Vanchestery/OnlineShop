@@ -37,11 +37,20 @@
         <p class="text-secondary mb-4" style="white-space: pre-line">@Model.Description</p>
 
         <div class="d-flex gap-2 mb-4">
-            @* Кнопки появятся в Phase 6 (корзина) и Phase 7 (избранное). *@
-            <button type="button" class="btn btn-dark btn-lg" disabled
-                    title="Появится в следующей фазе">
-                В корзину
-            </button>
+            @if (Model.IsAvailable)
+            {
+                <form asp-controller="Cart" asp-action="Add" method="post" class="d-inline">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <input type="hidden" name="returnUrl" value="@Url.Action("Details", "Product", new { id = Model.Id })" />
+                    <button type="submit" class="btn btn-dark btn-lg">В корзину</button>
+                </form>
+            }
+            else
+            {
+                <button type="button" class="btn btn-dark btn-lg" disabled>В корзину</button>
+            }
+            @* Кнопка избранного появится в Phase 7. *@
             <button type="button" class="btn btn-outline-dark" disabled
                     title="Появится в следующей фазе">
                 ❤

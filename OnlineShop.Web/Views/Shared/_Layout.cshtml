@@ -29,6 +29,11 @@
                             <a class="nav-link" asp-controller="Product" asp-action="Index">Каталог</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav me-2">
+                        <li class="nav-item">
+                            @await Component.InvokeAsync("CartBadge")
+                        </li>
+                    </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>

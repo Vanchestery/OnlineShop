@@ -17,6 +17,12 @@ public interface IShoppingCartStorage
 
     Task<Cart> CreateAnonymousAsync(CancellationToken ct = default);
 
+    /// <summary>
+    /// Быстрый подсчёт SUM(Quantity) без загрузки сущностей —
+    /// для бейджа корзины в навбаре. 0 если корзины нет или она пуста.
+    /// </summary>
+    Task<int> GetItemCountAsync(Guid cartId, CancellationToken ct = default);
+
     Task AddItemAsync(Guid cartId, Guid productId, int quantity, CancellationToken ct = default);
 
     Task DecreaseItemAsync(Guid cartId, Guid productId, CancellationToken ct = default);
