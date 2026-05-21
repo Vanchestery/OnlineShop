@@ -1,0 +1,23 @@
+@model OnlineShop.Web.ViewModels.Catalog.ProductCardViewModel
+
+<div class="card h-100 product-card">
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <img src="@Model.ImagePath" class="card-img-top product-image" alt="@Model.Name" />
+    }
+    else
+    {
+        <div class="product-image-placeholder">
+            <span>@Model.Name.Substring(0, 1).ToUpper()</span>
+        </div>
+    }
+    <div class="card-body d-flex flex-column">
+        <h5 class="card-title">
+            <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.Id"
+               class="text-decoration-none text-dark stretched-link">@Model.Name</a>
+        </h5>
+        <p class="card-text mt-auto mb-0">
+            <strong class="fs-5">@Model.Price.ToString("N2") ₽</strong>
+        </p>
+    </div>
+</div>

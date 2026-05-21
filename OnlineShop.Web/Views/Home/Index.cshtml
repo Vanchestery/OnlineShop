@@ -1,8 +1,25 @@
+@model IReadOnlyList<OnlineShop.Web.ViewModels.Catalog.ProductCardViewModel>
 @{
     ViewData["Title"] = "Главная";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-4">OnlineShop</h1>
-    <p class="lead text-muted">Каркас собран. Каталог появится в Фазе 4.</p>
-</div>
+<section class="hero text-center py-5 mb-5 bg-light rounded-3">
+    <h1 class="display-4 fw-bold">OnlineShop</h1>
+    <p class="lead text-muted mb-4">Кофе, чай и всё для уютного утра.</p>
+    <a asp-controller="Product" asp-action="Index" class="btn btn-dark btn-lg px-4">
+        Открыть каталог
+    </a>
+</section>
+
+@if (Model.Count > 0)
+{
+    <h2 class="h4 mb-3">Популярное</h2>
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <partial name="_ProductCard" model="item" />
+            </div>
+        }
+    </div>
+}
