@@ -43,3 +43,12 @@ body {
     font-size: 6rem;
     border-radius: .5rem;
 }
+
+/* ── Валидация форм ──────────────────────────────────────────
+   ASP.NET Core рендерит asp-validation-summary с классом
+   "validation-summary-valid" когда нет ошибок и
+   "validation-summary-errors" когда есть. Скрываем "valid" чтобы
+   не показывать пустую красную плашку. */
+.validation-summary-valid {
+    display: none;
+}

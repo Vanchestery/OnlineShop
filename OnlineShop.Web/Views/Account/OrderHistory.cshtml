@@ -1,0 +1,49 @@
+@model OnlineShop.Web.ViewModels.Auth.OrderHistoryViewModel
+@using OnlineShop.Web.Helpers
+@{
+    ViewData["Title"] = "Мои заказы";
+}
+
+<h1 class="h3 mb-4">Мои заказы</h1>
+
+@if (Model.Orders.Count == 0)
+{
+    <div class="alert alert-light text-center py-5">
+        У вас пока нет заказов.
+        <a asp-controller="Product" asp-action="Index" class="btn btn-dark btn-sm ms-2">
+            Перейти в каталог
+        </a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                    <th>Товаров</th>
+                    <th class="text-end">Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <td><code>@order.Id.ToString()[..8]</code></td>
+                        <td>@order.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <span class="badge @order.Status.ToBadgeClass()">
+                                @order.Status.ToRussian()
+                            </span>
+                        </td>
+                        <td>@order.ItemsCount шт.</td>
+                        <td class="text-end fw-bold">@order.Total.ToString("N2") ₽</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
