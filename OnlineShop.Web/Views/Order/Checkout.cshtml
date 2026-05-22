@@ -1,0 +1,81 @@
+@model OnlineShop.Web.ViewModels.Order.CheckoutViewModel
+@{
+    ViewData["Title"] = "Оформление заказа";
+}
+
+<h1 class="h3 mb-4">Оформление заказа</h1>
+
+<form asp-action="Checkout" method="post">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <h2 class="h5 mb-3">Адрес доставки</h2>
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Address.Country" class="form-label"></label>
+                <input asp-for="Address.Country" class="form-control" autocomplete="country" />
+                <span asp-validation-for="Address.Country" class="text-danger small"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Address.City" class="form-label"></label>
+                    <input asp-for="Address.City" class="form-control" autocomplete="address-level2" />
+                    <span asp-validation-for="Address.City" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Address.ZipCode" class="form-label"></label>
+                    <input asp-for="Address.ZipCode" class="form-control" autocomplete="postal-code" />
+                    <span asp-validation-for="Address.ZipCode" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Address.Street" class="form-label"></label>
+                <input asp-for="Address.Street" class="form-control" autocomplete="street-address" />
+                <span asp-validation-for="Address.Street" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Address.Apartment" class="form-label"></label>
+                <input asp-for="Address.Apartment" class="form-control" />
+                <span asp-validation-for="Address.Apartment" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <h2 class="h5 mb-3">Ваш заказ</h2>
+
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    @foreach (var item in Model.Cart.Items)
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>
+                                @item.ProductName
+                                <small class="text-muted">× @item.Quantity</small>
+                            </span>
+                            <span>@item.Subtotal.ToString("N2") ₽</span>
+                        </li>
+                    }
+                    <li class="list-group-item d-flex justify-content-between fw-bold">
+                        <span>Итого</span>
+                        <span>@Model.Cart.Total.ToString("N2") ₽</span>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="btn btn-dark btn-lg w-100 mt-3">
+                Подтвердить заказ
+            </button>
+            <a asp-controller="Cart" asp-action="Index" class="btn btn-link w-100 mt-1">
+                Вернуться в корзину
+            </a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
