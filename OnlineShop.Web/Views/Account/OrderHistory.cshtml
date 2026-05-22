@@ -26,6 +26,7 @@ else
                     <th>Статус</th>
                     <th>Товаров</th>
                     <th class="text-end">Сумма</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +42,12 @@ else
                         </td>
                         <td>@order.ItemsCount шт.</td>
                         <td class="text-end fw-bold">@order.Total.ToString("N2") ₽</td>
+                        <td class="text-end">
+                            <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id"
+                               class="btn btn-sm btn-outline-secondary">
+                                Открыть
+                            </a>
+                        </td>
                     </tr>
                 }
             </tbody>

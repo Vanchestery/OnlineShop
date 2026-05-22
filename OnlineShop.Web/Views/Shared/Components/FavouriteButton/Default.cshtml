@@ -1,0 +1,28 @@
+@model OnlineShop.Web.ViewModels.Favourites.FavouriteButtonViewModel
+@{
+    var returnUrl = Url.Action("Details", "Product", new { id = Model.ProductId });
+}
+
+@if (!Model.IsAuthenticated)
+{
+    @* Аноним — клик ведёт на login с returnUrl на эту же страницу *@
+    <a asp-controller="Account" asp-action="Login"
+       asp-route-returnUrl="@returnUrl"
+       class="btn btn-outline-secondary"
+       title="Войдите чтобы добавить в избранное">♡</a>
+}
+else
+{
+    <form asp-controller="Favourite" asp-action="Toggle" method="post" class="d-inline">
+        <input type="hidden" name="productId" value="@Model.ProductId" />
+        <input type="hidden" name="returnUrl" value="@returnUrl" />
+        @if (Model.IsFavourite)
+        {
+            <button type="submit" class="btn btn-danger" title="Убрать из избранного">❤</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-outline-dark" title="Добавить в избранное">♡</button>
+        }
+    </form>
+}

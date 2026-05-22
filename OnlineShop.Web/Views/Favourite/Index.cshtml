@@ -1,0 +1,53 @@
+@model OnlineShop.Web.ViewModels.Favourites.FavouriteListViewModel
+@{
+    ViewData["Title"] = "Избранное";
+}
+
+<h1 class="h3 mb-4">Избранное</h1>
+
+@if (Model.IsEmpty)
+{
+    <div class="alert alert-light text-center py-5">
+        <p class="mb-3">В избранном пока пусто.</p>
+        <a asp-controller="Product" asp-action="Index" class="btn btn-dark">Перейти в каталог</a>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var item in Model.Items)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 product-card">
+                    @if (!string.IsNullOrEmpty(item.ProductImagePath))
+                    {
+                        <img src="@item.ProductImagePath" class="card-img-top product-image" alt="@item.ProductName" />
+                    }
+                    else
+                    {
+                        <div class="product-image-placeholder">
+                            <span>@(item.ProductName.Length > 0 ? item.ProductName.Substring(0, 1).ToUpper() : "?")</span>
+                        </div>
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId"
+                               class="text-decoration-none text-dark">@item.ProductName</a>
+                        </h5>
+                        @if (!item.ProductIsAvailable)
+                        {
+                            <span class="badge bg-secondary mb-2 align-self-start">недоступен</span>
+                        }
+                        <p class="card-text mt-auto mb-2">
+                            <strong class="fs-5">@item.ProductPrice.ToString("N2") ₽</strong>
+                        </p>
+                        <form asp-controller="Favourite" asp-action="Remove" method="post">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger w-100">Убрать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

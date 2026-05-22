@@ -50,11 +50,7 @@
             {
                 <button type="button" class="btn btn-dark btn-lg" disabled>В корзину</button>
             }
-            @* Кнопка избранного появится в Phase 7. *@
-            <button type="button" class="btn btn-outline-dark" disabled
-                    title="Появится в следующей фазе">
-                ❤
-            </button>
+            @await Component.InvokeAsync("FavouriteButton", new { productId = Model.Id })
         </div>
     </div>
 </div>
