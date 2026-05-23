@@ -59,6 +59,9 @@
 
 <section>
     <h2 class="h4 mb-3">Отзывы</h2>
-    @* Появится в Phase 8. *@
-    <p class="text-muted">Раздел отзывов будет добавлен в следующих фазах.</p>
+    @await Component.InvokeAsync("ProductReviews", new { productId = Model.Id })
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

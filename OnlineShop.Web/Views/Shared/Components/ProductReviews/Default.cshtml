@@ -1,0 +1,86 @@
+@model OnlineShop.Web.ViewModels.Reviews.ProductReviewsViewModel
+@{
+    // Округляем средний рейтинг до ближайшего целого для отображения звёздами.
+    var fullStars = (int)Math.Round(Model.AverageRating);
+    var emptyStars = 5 - fullStars;
+    var starsHtml = new string('★', fullStars) + new string('☆', emptyStars);
+}
+
+<div class="d-flex align-items-center gap-3 mb-4">
+    <span class="fs-3 text-warning" style="letter-spacing: 2px;">@starsHtml</span>
+    @if (Model.Count > 0)
+    {
+        <span class="text-muted">
+            <strong>@Model.AverageRating.ToString("0.0")</strong> из 5
+            (@Model.Count @(Model.Count == 1 ? "отзыв" : Model.Count < 5 ? "отзыва" : "отзывов"))
+        </span>
+    }
+    else
+    {
+        <span class="text-muted">пока нет отзывов</span>
+    }
+</div>
+
+@if (Model.IsAuthenticated)
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="h6 mb-3">Оставить отзыв</h3>
+            <form asp-controller="Reviews" asp-action="Add" method="post">
+                <input type="hidden" asp-for="NewReview.ProductId" />
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label asp-for="NewReview.Rating" class="form-label"></label>
+                        <select asp-for="NewReview.Rating" class="form-select">
+                            <option value="5">★★★★★ (5)</option>
+                            <option value="4">★★★★ (4)</option>
+                            <option value="3">★★★ (3)</option>
+                            <option value="2">★★ (2)</option>
+                            <option value="1">★ (1)</option>
+                        </select>
+                        <span asp-validation-for="NewReview.Rating" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="NewReview.Text" class="form-label"></label>
+                    <textarea asp-for="NewReview.Text" class="form-control" rows="3"
+                              placeholder="Что понравилось, что нет..."></textarea>
+                    <span asp-validation-for="NewReview.Text" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-dark">Опубликовать</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-light">
+        <a asp-controller="Account" asp-action="Login"
+           asp-route-returnUrl="@Url.Action("Details", "Product", new { id = Model.ProductId })">
+            Войдите
+        </a>, чтобы оставить отзыв.
+    </div>
+}
+
+@if (Model.Items.Count > 0)
+{
+    <div class="reviews-list">
+        @foreach (var review in Model.Items)
+        {
+            var rStars = new string('★', review.Rating) + new string('☆', 5 - review.Rating);
+            <div class="review border-bottom pb-3 mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                        <strong>@review.UserName</strong>
+                        <span class="text-warning ms-2">@rStars</span>
+                    </div>
+                    <small class="text-muted">@review.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</small>
+                </div>
+                <p class="mb-0" style="white-space: pre-line">@review.Text</p>
+            </div>
+        }
+    </div>
+}
