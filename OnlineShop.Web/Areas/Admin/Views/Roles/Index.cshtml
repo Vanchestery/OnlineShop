@@ -1,0 +1,16 @@
+@model IReadOnlyList<string>
+@{
+    ViewData["Title"] = "Роли";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Роли <small class="text-muted">(@Model.Count)</small></h1>
+    <a asp-action="Create" class="btn btn-dark">+ Создать роль</a>
+</div>
+
+<ul class="list-group">
+    @foreach (var role in Model)
+    {
+        <li class="list-group-item">@role</li>
+    }
+</ul>

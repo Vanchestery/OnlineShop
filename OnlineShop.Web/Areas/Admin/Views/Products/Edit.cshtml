@@ -1,0 +1,72 @@
+@model OnlineShop.Web.Areas.Admin.ViewModels.ProductFormViewModel
+@{
+    ViewData["Title"] = $"Редактирование: {Model.Name}";
+}
+
+<h1 class="h3 mb-4">Редактирование товара</h1>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @* Hidden поля для Id и ExistingImagePath чтобы не потерялись при POST *@
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ExistingImagePath" />
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Price" class="form-label"></label>
+                    <input asp-for="Price" class="form-control" step="0.01" />
+                    <span asp-validation-for="Price" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3 d-flex align-items-center">
+                    <div class="form-check mt-3">
+                        <input asp-for="IsAvailable" class="form-check-input" />
+                        <label asp-for="IsAvailable" class="form-check-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ImageFile" class="form-label">Сменить картинку</label>
+                <input asp-for="ImageFile" type="file" class="form-control"
+                       accept=".jpg,.jpeg,.png,.webp" />
+                <div class="form-text">Оставьте пустым чтобы сохранить текущую.</div>
+                <span asp-validation-for="ImageFile" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <h2 class="h6 text-muted">Текущая картинка</h2>
+            @if (!string.IsNullOrEmpty(Model.ExistingImagePath))
+            {
+                <img src="@Model.ExistingImagePath" alt="@Model.Name"
+                     class="img-fluid rounded border" />
+            }
+            else
+            {
+                <div class="border rounded p-5 text-center text-muted">нет картинки</div>
+            }
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-dark mt-3">Сохранить</button>
+    <a asp-action="Index" class="btn btn-link">Отмена</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,4 +1,7 @@
+using System.Globalization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Core.Extensions;
 using OnlineShop.Db;
@@ -94,6 +97,17 @@ try
         app.UseHsts();
     }
 
+    // Локаль: парсим числа всегда с точкой (en-US), но UI на русском (ru-RU).
+    // Без этого jquery-validation в браузере и model binding на сервере ждут
+    // разных форматов decimal — невозможно ввести цену вроде 1290.50.
+    var supportedCultures = new[] { new CultureInfo("en-US"), new CultureInfo("ru-RU") };
+    app.UseRequestLocalization(new RequestLocalizationOptions
+    {
+        DefaultRequestCulture = new RequestCulture("en-US", "ru-RU"),
+        SupportedCultures = supportedCultures,
+        SupportedUICultures = supportedCultures
+    });
+
     app.UseHttpsRedirection();
     app.UseStaticFiles();
 
@@ -107,6 +121,14 @@ try
     // Authentication устанавливает HttpContext.User, Authorization его проверяет.
     app.UseAuthentication();
     app.UseAuthorization();
+
+    // Routing для Area — должен идти ДО default route, иначе default перехватывает
+    // /Admin/Products/Index как controller=Admin, action=Products, id=Index. Constraint
+    // {area:exists} требует совпадения с зарегистрированной Area, поэтому /Home/Index
+    // и т.п. не матчатся этим шаблоном — провалятся в default.
+    app.MapControllerRoute(
+        name: "areas",
+        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
     app.MapControllerRoute(
         name: "default",
