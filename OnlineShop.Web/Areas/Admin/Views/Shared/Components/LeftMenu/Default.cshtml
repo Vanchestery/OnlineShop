@@ -1,0 +1,24 @@
+@model string
+
+@{
+    string ActiveIf(string controller) => Model == controller ? "active" : string.Empty;
+}
+
+<div class="list-group">
+    <a class="list-group-item list-group-item-action @ActiveIf("Products")"
+       asp-area="Admin" asp-controller="Products" asp-action="Index">
+        Товары
+    </a>
+    <a class="list-group-item list-group-item-action @ActiveIf("Orders")"
+       asp-area="Admin" asp-controller="Orders" asp-action="Index">
+        Заказы
+    </a>
+    <a class="list-group-item list-group-item-action @ActiveIf("Users")"
+       asp-area="Admin" asp-controller="Users" asp-action="Index">
+        Пользователи
+    </a>
+    <a class="list-group-item list-group-item-action @ActiveIf("Roles")"
+       asp-area="Admin" asp-controller="Roles" asp-action="Index">
+        Роли
+    </a>
+</div>

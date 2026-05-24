@@ -1,0 +1,89 @@
+@model OnlineShop.Web.Areas.Admin.ViewModels.AdminOrderDetailsViewModel
+@using OnlineShop.Web.Helpers
+@using OnlineShop.Db.Models
+@{
+    ViewData["Title"] = $"Заказ {Model.Id.ToString()[..8]}";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Заказ <code>@Model.Id.ToString()[..8]</code></h1>
+    <span class="badge fs-6 @Model.Status.ToBadgeClass()">@Model.Status.ToRussian()</span>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <h2 class="h5 mb-3">Состав</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th class="text-end">Цена</th>
+                        <th class="text-center">Кол-во</th>
+                        <th class="text-end">Подсумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td class="text-end">@item.Price.ToString("N2") ₽</td>
+                            <td class="text-center">@item.Quantity</td>
+                            <td class="text-end fw-bold">@item.Subtotal.ToString("N2") ₽</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold">Итого:</td>
+                        <td class="text-end fw-bold fs-5">@Model.Total.ToString("N2") ₽</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <h2 class="h5 mb-3">Клиент</h2>
+        <p>
+            <strong>@Model.UserFullName</strong><br />
+            <small class="text-muted">id: <code>@Model.UserId.ToString()[..8]</code></small>
+        </p>
+
+        <h2 class="h5 mt-4 mb-3">Дата</h2>
+        <p>@Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+
+        <h2 class="h5 mt-4 mb-3">Адрес доставки</h2>
+        <address>
+            @Model.DeliveryAddress.Country, @Model.DeliveryAddress.ZipCode<br />
+            @Model.DeliveryAddress.City<br />
+            @Model.DeliveryAddress.Street@(string.IsNullOrEmpty(Model.DeliveryAddress.Apartment) ? "" : $", кв. {Model.DeliveryAddress.Apartment}")
+        </address>
+
+        <h2 class="h5 mt-4 mb-3">Сменить статус</h2>
+        <form asp-action="ChangeStatus" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="input-group">
+                <select name="newStatus" class="form-select">
+                    @foreach (var status in Enum.GetValues<OrderStatus>())
+                    {
+                        if (status == Model.Status)
+                        {
+                            <option value="@status" selected>@status.ToRussian()</option>
+                        }
+                        else
+                        {
+                            <option value="@status">@status.ToRussian()</option>
+                        }
+                    }
+                </select>
+                <button type="submit" class="btn btn-dark">Применить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-secondary">← К списку заказов</a>
+</div>

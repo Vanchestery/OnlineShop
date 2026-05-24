@@ -1,0 +1,41 @@
+@model IReadOnlyList<OnlineShop.Web.Areas.Admin.ViewModels.UserRowViewModel>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<h1 class="h3 mb-3">Пользователи <small class="text-muted">(@Model.Count)</small></h1>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Имя</th>
+                <th>Роли</th>
+                <th>Регистрация</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model)
+            {
+                <tr>
+                    <td>@u.Email</td>
+                    <td>@u.FullName</td>
+                    <td>
+                        @foreach (var role in u.Roles)
+                        {
+                            <span class="badge bg-secondary me-1">@role</span>
+                        }
+                    </td>
+                    <td>@u.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</td>
+                    <td class="text-end">
+                        <a asp-action="Details" asp-route-id="@u.Id" class="btn btn-sm btn-outline-secondary">
+                            Открыть
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

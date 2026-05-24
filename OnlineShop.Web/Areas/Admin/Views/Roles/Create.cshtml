@@ -1,0 +1,31 @@
+@model OnlineShop.Web.Areas.Admin.ViewModels.CreateRoleViewModel
+@{
+    ViewData["Title"] = "Новая роль";
+}
+
+<h1 class="h3 mb-4">Новая роль</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" autofocus />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+                <div class="form-text">
+                    Только латинские буквы, цифры и подчёркивание. Используется в коде:
+                    <code>[Authorize(Roles = "...")]</code>.
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-dark">Создать</button>
+            <a asp-action="Index" class="btn btn-link">Отмена</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
