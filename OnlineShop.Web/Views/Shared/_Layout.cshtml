@@ -3,66 +3,80 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] — OnlineShop</title>
+    <title>@ViewData["Title"] — BREWCO</title>
+
+    @* Google Fonts: Bebas Neue (заголовки), Space Mono (метки), DM Sans (тело) *@
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+    @* Bootstrap — оставлен для grid/flex/utility классов. Brutal.css подключается ПОСЛЕ
+       и переопределяет визуальные компоненты. *@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/brutal.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">OnlineShop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#nav" aria-controls="nav" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="nav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Главная</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Product" asp-action="Index">Каталог</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav me-2">
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Favourite" asp-action="Index">
-                                    Избранное
-                                </a>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            @await Component.InvokeAsync("CartBadge")
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+        @* Брутал-навигация: лого слева, ссылки, справа — избранное/корзина/аутх *@
+        <nav class="site-nav">
+            <a class="nav-logo" asp-controller="Home" asp-action="Index">BREWCO</a>
+
+            <ul class="nav-links">
+                <li><a asp-controller="Home" asp-action="Index">Главная</a></li>
+                <li><a asp-controller="Product" asp-action="Index">Каталог</a></li>
+            </ul>
+
+            <div class="nav-spacer"></div>
+
+            <div class="nav-right">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a class="nav-fav" asp-controller="Favourite" asp-action="Index" title="Избранное">♥</a>
+                }
+                @await Component.InvokeAsync("CartBadge")
+                <partial name="_LoginPartial" />
             </div>
         </nav>
+
+        @* Анимированный тикер под навигацией *@
+        <div class="ticker-wrap">
+            <div class="ticker">
+                <span>★ Свежая обжарка каждый понедельник</span>
+                <span>★ Доставка по всей России</span>
+                <span>★ Specialty grade only</span>
+                <span>★ Кофе · Чай · Аксессуары</span>
+                <span>★ Direct trade</span>
+                <span>★ Свежая обжарка каждый понедельник</span>
+                <span>★ Доставка по всей России</span>
+                <span>★ Specialty grade only</span>
+                <span>★ Кофе · Чай · Аксессуары</span>
+                <span>★ Direct trade</span>
+            </div>
+        </div>
     </header>
 
-    <main role="main" class="container">
-        @if (TempData["StatusMessage"] is string status)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                @status
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
+    @if (TempData["StatusMessage"] is string status)
+    {
+        <div class="brutal-alert">
+            <span>★ @status</span>
+            <button type="button" class="brutal-alert-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    }
+
+    <main class="brutal-main" role="main">
         @RenderBody()
     </main>
 
-    <footer class="border-top text-muted py-3 mt-5">
-        <div class="container text-center small">
-            &copy; @DateTime.Now.Year — OnlineShop
-        </div>
+    <footer class="site-footer">
+        <a class="footer-logo" asp-controller="Home" asp-action="Index">BREWCO</a>
+        <div class="footer-text">© @DateTime.Now.Year · Specialty Coffee</div>
+        <ul class="footer-links">
+            <li><a asp-controller="Product" asp-action="Index">Каталог</a></li>
+            <li><a asp-controller="Home" asp-action="Index">Главная</a></li>
+        </ul>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

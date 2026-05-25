@@ -1,0 +1,377 @@
+/* ════════════════════════════════════════════════════════════════════════
+   BREWCO — Brutalist Modern stylesheet
+   Подключается ПОСЛЕ Bootstrap. Bootstrap оставлен для grid/flex/utility
+   классов (row, col-md-X, d-flex, gap-N). Визуальные компоненты — наши.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    --black: #0d0d0d;
+    --white: #f0ece4;
+    --accent: #1a472a;
+    --lime: #b5d333;
+    --orange: #e85d04;
+    --gray: #e8e4dc;
+    --muted: #888;
+}
+
+/* ── Reset / база ─────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a { color: inherit; }
+a:hover { color: var(--accent); }
+
+/* Bebas Neue для заголовков */
+h1, h2, h3, h4, h5, h6, .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
+    color: var(--black);
+    line-height: 1;
+}
+
+/* Кодовые / метки — Space Mono */
+.eyebrow, .label-mono, .tag-mono {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* ── Навигация ────────────────────────────────────────────────────────── */
+
+.site-nav {
+    background: var(--black);
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid #222;
+}
+
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.1em;
+    color: var(--lime);
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    border-right: 3px solid #222;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.nav-logo:hover { color: var(--orange); }
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.nav-links li { border-right: 1px solid #1a1a1a; }
+.nav-links a {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 100%;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #888;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+.nav-links a:hover { background: #1a1a1a; color: var(--lime); }
+
+/* Спейсер чтобы правая часть прижалась вправо */
+.nav-spacer { flex: 1; }
+
+.nav-right {
+    display: flex;
+    align-items: stretch;
+}
+.nav-right > * {
+    display: flex;
+    align-items: center;
+    border-left: 1px solid #1a1a1a;
+}
+
+/* Текстовые ссылки в правой части (Войти, Регистрация, имя юзера) */
+.nav-text-link {
+    padding: 0 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #888;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    height: 100%;
+}
+.nav-text-link:hover { background: #1a1a1a; color: var(--lime); }
+.nav-text-link.is-active { color: var(--lime); }
+
+/* Избранное-сердечко в навбаре */
+.nav-fav {
+    padding: 0 18px;
+    color: var(--lime);
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.nav-fav:hover { background: #1a1a1a; color: var(--orange); }
+
+/* Кнопка-корзина — лаймовая */
+.nav-cart {
+    background: var(--lime);
+    color: var(--black);
+    border: none;
+    padding: 0 32px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s;
+    white-space: nowrap;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+.nav-cart:hover { background: var(--orange); color: #fff; }
+
+/* Бейдж количества в корзине — внутри лаймовой кнопки */
+.nav-cart-count {
+    background: var(--black);
+    color: var(--lime);
+    padding: 2px 8px;
+    margin-left: 8px;
+    font-weight: 700;
+}
+
+/* Admin-метка */
+.nav-admin {
+    padding: 0 18px;
+    color: var(--orange);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.nav-admin:hover { background: var(--orange); color: var(--black); }
+
+/* ── Тикер ────────────────────────────────────────────────────────────── */
+
+.ticker-wrap {
+    background: var(--accent);
+    overflow: hidden;
+    border-bottom: 3px solid var(--black);
+    padding: 10px 0;
+}
+.ticker {
+    display: inline-flex;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+}
+.ticker span {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--lime);
+    text-transform: uppercase;
+    padding: 0 32px;
+}
+@keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ── Основной контент ─────────────────────────────────────────────────── */
+
+.brutal-main {
+    min-height: calc(100vh - 270px);
+}
+
+/* TempData-алерт в брутал-стиле */
+.brutal-alert {
+    background: var(--lime);
+    color: var(--black);
+    border: 3px solid var(--black);
+    padding: 16px 24px;
+    margin: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.brutal-alert-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--black);
+}
+
+/* ── Кнопки ───────────────────────────────────────────────────────────── */
+
+.btn-brutal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    color: var(--lime);
+    padding: 18px 40px;
+    border: 3px solid var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 700;
+    text-decoration: none;
+    line-height: 1;
+}
+.btn-brutal:hover { background: var(--accent); border-color: var(--accent); color: var(--lime); }
+
+.btn-brutal-outline {
+    background: transparent;
+    color: var(--black);
+    border: 3px solid var(--black);
+}
+.btn-brutal-outline:hover { background: var(--black); color: var(--white); }
+
+.btn-brutal-orange {
+    background: var(--orange);
+    color: var(--white);
+    border-color: var(--orange);
+}
+.btn-brutal-orange:hover { background: var(--black); border-color: var(--black); color: var(--lime); }
+
+.btn-brutal-sm { padding: 10px 20px; font-size: 10px; }
+
+/* ── Заголовки секций ────────────────────────────────────────────────── */
+
+.section-divider {
+    border-top: 3px solid var(--black);
+    padding: 80px 60px;
+    background: var(--white);
+}
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 3px solid var(--black);
+}
+
+.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 6vw, 72px);
+    color: var(--black);
+    line-height: 1;
+    letter-spacing: 0.01em;
+    margin: 0;
+}
+.section-title .accent { color: var(--orange); }
+.section-title .lime { color: var(--lime); }
+
+/* ── Footer ───────────────────────────────────────────────────────────── */
+
+.site-footer {
+    background: var(--black);
+    border-top: 3px solid #222;
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--lime);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+}
+.footer-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #444;
+    text-transform: uppercase;
+}
+.footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.footer-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #555;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--lime); }
+
+/* ── Утилиты — отступы для совместимости с Bootstrap ──────────────────── */
+
+.bg-brutal-black { background: var(--black); color: var(--white); }
+.bg-brutal-white { background: var(--white); color: var(--black); }
+.bg-brutal-lime  { background: var(--lime); color: var(--black); }
+
+.text-brutal-lime   { color: var(--lime); }
+.text-brutal-orange { color: var(--orange); }
+.text-brutal-muted  { color: var(--muted); }
+
+.border-brutal { border: 3px solid var(--black); }
+
+/* Скрываем валидационный пустой div — мы это правило ставили в site.css */
+.validation-summary-valid { display: none; }
+
+/* ── Mobile ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-logo { font-size: 24px; padding: 0 16px; }
+    .nav-cart { padding: 0 16px; }
+    .section-divider { padding: 40px 20px; }
+    .site-footer { padding: 24px 20px; flex-direction: column; text-align: center; }
+}
