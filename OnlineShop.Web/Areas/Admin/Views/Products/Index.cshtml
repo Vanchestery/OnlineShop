@@ -1,4 +1,5 @@
 @model IReadOnlyList<OnlineShop.Web.Areas.Admin.ViewModels.ProductRowViewModel>
+@using OnlineShop.Web.Helpers
 @{
     ViewData["Title"] = "Товары";
 }
@@ -14,6 +15,7 @@
             <tr>
                 <th style="width: 80px"></th>
                 <th>Название</th>
+                <th>Категория</th>
                 <th class="text-end">Цена</th>
                 <th class="text-center">Статус</th>
                 <th class="text-end">Действия</th>
@@ -37,6 +39,7 @@
                         }
                     </td>
                     <td>@p.Name</td>
+                    <td><span class="badge bg-secondary">@p.Category.ToRussian()</span></td>
                     <td class="text-end">@p.Price.ToString("N2") ₽</td>
                     <td class="text-center">
                         @if (p.IsAvailable)

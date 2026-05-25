@@ -8,7 +8,7 @@ public interface IProductsStorage
 
     Task<IReadOnlyList<Product>> GetAllAsync(bool includeUnavailable = false, CancellationToken ct = default);
 
-    Task<IReadOnlyList<Product>> SearchAsync(string? query, CancellationToken ct = default);
+    Task<IReadOnlyList<Product>> SearchAsync(string? query, ProductCategory? category = null, CancellationToken ct = default);
 
     Task AddAsync(Product product, CancellationToken ct = default);
 

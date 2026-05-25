@@ -29,9 +29,9 @@ public class ProductService : IProductService
         return entity is null ? null : _mapper.Map<ProductDto>(entity);
     }
 
-    public async Task<IReadOnlyList<ProductDto>> SearchAsync(string? query, CancellationToken ct = default)
+    public async Task<IReadOnlyList<ProductDto>> SearchAsync(string? query, ProductCategory? category = null, CancellationToken ct = default)
     {
-        var entities = await _products.SearchAsync(query, ct);
+        var entities = await _products.SearchAsync(query, category, ct);
         return _mapper.Map<List<ProductDto>>(entities);
     }
 
@@ -54,6 +54,7 @@ public class ProductService : IProductService
         existing.Name = dto.Name;
         existing.Description = dto.Description;
         existing.Price = dto.Price;
+        existing.Category = dto.Category;
         existing.ImagePath = dto.ImagePath;
         existing.IsAvailable = dto.IsAvailable;
 

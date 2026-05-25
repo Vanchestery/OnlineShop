@@ -1,4 +1,5 @@
 using OnlineShop.Core.Dtos;
+using OnlineShop.Db.Models;
 
 namespace OnlineShop.Core.Interfaces;
 
@@ -8,7 +9,7 @@ public interface IProductService
 
     Task<ProductDto?> GetByIdAsync(Guid id, CancellationToken ct = default);
 
-    Task<IReadOnlyList<ProductDto>> SearchAsync(string? query, CancellationToken ct = default);
+    Task<IReadOnlyList<ProductDto>> SearchAsync(string? query, ProductCategory? category = null, CancellationToken ct = default);
 
     Task<ProductDto> CreateAsync(ProductDto dto, CancellationToken ct = default);
 

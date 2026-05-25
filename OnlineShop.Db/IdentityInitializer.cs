@@ -96,19 +96,33 @@ public class IdentityInitializer
         var now = DateTimeOffset.UtcNow;
         var products = new List<Product>
         {
-            new() { Name = "Кофе зерновой Arabica 1кг", Description = "Высокогорная арабика средней обжарки. Ноты шоколада и карамели.", Price = 1290m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Чай зелёный Sencha 100г", Description = "Японский зелёный чай первого сбора. Свежий травяной вкус.", Price = 580m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Чайник заварочный 800мл", Description = "Стеклянный заварник с фильтром из нержавеющей стали.", Price = 1450m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Кружка керамическая 350мл", Description = "Матовая глазурь, удобная ручка, посудомоечная машина — да.", Price = 390m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Кофемолка ручная", Description = "Бурр-механизм с регулировкой помола. 6 ступеней.", Price = 3490m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Френч-пресс 600мл", Description = "Боросиликатное стекло, двойной фильтр, металлическое основание.", Price = 1190m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Молочник металлический 350мл", Description = "Для взбивания молока и капучино. Носик для латте-арта.", Price = 690m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Шоколад тёмный 70% 100г", Description = "Бельгийский шоколад без добавок. Хорошо подходит к кофе.", Price = 220m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Сахар тростниковый 500г", Description = "Нерафинированный коричневый сахар. Лёгкий карамельный оттенок.", Price = 180m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Печенье миндальное 200г", Description = "Хрустящее печенье с миндальной мукой. Без глютена.", Price = 320m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Термокружка 500мл", Description = "Нержавейка, держит температуру до 8 часов. Крышка с защитой от протекания.", Price = 1990m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Книга «Кофе. От зерна к чашке»", Description = "Иллюстрированное руководство по обжарке, помолу и приготовлению.", Price = 890m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
-            new() { Name = "Подставка для кружек деревянная", Description = "Натуральный дуб, лазерная гравировка. Набор из 4 штук.", Price = 560m, IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            // ─── COFFEE (5) ────────────────────────────────────────────────
+            new() { Name = "Кофе зерновой Arabica 1кг", Description = "Высокогорная арабика средней обжарки. Ноты шоколада и карамели. Универсальный профиль на каждый день.", Price = 1290m, Category = ProductCategory.Coffee, ImagePath = "/images/products/coffee-arabica.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Кофе Ethiopia Yirgacheffe 250г", Description = "Specialty-кофе из Эфиопии. Цветочные ноты, цитрусовая кислинка, светлая обжарка.", Price = 980m, Category = ProductCategory.Coffee, ImagePath = "/images/products/coffee-ethiopia.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Кофе Colombia Supremo 250г", Description = "Сбалансированный профиль с тонами карамели и ореха. Средняя обжарка.", Price = 890m, Category = ProductCategory.Coffee, ImagePath = "/images/products/coffee-colombia.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Кофе Kenya AA Top 250г", Description = "Яркая ягодная кислотность, ноты грейпфрута и чёрной смородины. Тёмная обжарка.", Price = 1190m, Category = ProductCategory.Coffee, ImagePath = "/images/products/coffee-kenya.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Кофе Brazil Santos 250г", Description = "Мягкий вкус с шоколадными и ореховыми оттенками. Классическая бразильская обжарка.", Price = 750m, Category = ProductCategory.Coffee, ImagePath = "/images/products/coffee-brazil.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+
+            // ─── TEA (3) ───────────────────────────────────────────────────
+            new() { Name = "Чай зелёный Sencha 100г", Description = "Японский зелёный чай первого сбора. Свежий травяной вкус, лёгкий аромат свежескошенной травы.", Price = 580m, Category = ProductCategory.Tea, ImagePath = "/images/products/tea-sencha.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Чай Улун Те Гуань Инь 100г", Description = "Полуферментированный китайский чай. Ноты орхидеи и персика, высокогорный.", Price = 880m, Category = ProductCategory.Tea, ImagePath = "/images/products/tea-oolong.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Чай Earl Grey 100г", Description = "Классический английский чай: цейлонская основа с маслом бергамота. Британская традиция.", Price = 540m, Category = ProductCategory.Tea, ImagePath = "/images/products/tea-earl-grey.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+
+            // ─── ACCESSORY (9) ─────────────────────────────────────────────
+            new() { Name = "Чайник заварочный 800мл", Description = "Стеклянный заварник с фильтром из нержавеющей стали. Подходит для любого вида чая.", Price = 1450m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-teapot.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Кружка керамическая 350мл", Description = "Матовая глазурь, удобная ручка, посудомоечная машина — да.", Price = 390m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-mug.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Кофемолка ручная", Description = "Бурр-механизм с регулировкой помола. 6 ступеней — от эспрессо до френч-пресса.", Price = 3490m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-grinder.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Френч-пресс 600мл", Description = "Боросиликатное стекло, двойной фильтр, металлическое основание.", Price = 1190m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-french-press.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Молочник металлический 350мл", Description = "Для взбивания молока и капучино. Носик для латте-арта.", Price = 690m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-milk-jug.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Термокружка 500мл", Description = "Нержавейка, держит температуру до 8 часов. Крышка с защитой от протекания.", Price = 1990m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-thermo-mug.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Подставка для кружек деревянная", Description = "Натуральный дуб, лазерная гравировка. Набор из 4 штук.", Price = 560m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-coaster.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Турка медная 500мл", Description = "Медная турка для приготовления кофе по-восточному. На 3-4 чашки.", Price = 1290m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-cezve.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Дрипер V60 керамический", Description = "Pour-over дрипер. Спиральные рёбра внутри улучшают экстракцию.", Price = 1990m, Category = ProductCategory.Accessory, ImagePath = "/images/products/accessory-v60.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+
+            // ─── OTHER (3) ─────────────────────────────────────────────────
+            new() { Name = "Шоколад тёмный 70% 100г", Description = "Бельгийский шоколад без добавок. Хорошо подходит к кофе и крепкому чаю.", Price = 220m, Category = ProductCategory.Other, ImagePath = "/images/products/other-chocolate.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Печенье миндальное 200г", Description = "Хрустящее печенье с миндальной мукой. Без глютена.", Price = 320m, Category = ProductCategory.Other, ImagePath = "/images/products/other-cookies.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
+            new() { Name = "Книга «Кофе. От зерна к чашке»", Description = "Иллюстрированное руководство по обжарке, помолу и приготовлению. 240 страниц.", Price = 890m, Category = ProductCategory.Other, ImagePath = "/images/products/other-book.jpg", IsAvailable = true, CreatedAt = now, UpdatedAt = now },
         };
 
         _db.Products.AddRange(products);

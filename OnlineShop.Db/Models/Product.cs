@@ -14,6 +14,11 @@ public class Product
     public decimal Price { get; set; }
 
     /// <summary>
+    /// Категория товара. Используется для фильтра в каталоге.
+    /// </summary>
+    public ProductCategory Category { get; set; } = ProductCategory.Other;
+
+    /// <summary>
     /// Относительный путь к картинке (например "/images/products/abc.jpg"),
     /// null если картинки нет.
     /// </summary>

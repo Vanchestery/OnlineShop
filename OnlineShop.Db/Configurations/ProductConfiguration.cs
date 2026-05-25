@@ -26,10 +26,17 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.ImagePath)
             .HasMaxLength(500);
 
+        builder.Property(p => p.Category)
+            .HasDefaultValue(ProductCategory.Other)
+            .IsRequired();
+
         // Индекс на имя — для поиска LIKE/ILIKE.
         builder.HasIndex(p => p.Name);
 
         // Индекс на флаг доступности — частый фильтр в каталоге.
         builder.HasIndex(p => p.IsAvailable);
+
+        // Индекс на категорию — частый фильтр в каталоге.
+        builder.HasIndex(p => p.Category);
     }
 }

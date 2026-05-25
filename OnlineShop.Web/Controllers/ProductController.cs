@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
+using OnlineShop.Db.Models;
 using OnlineShop.Web.ViewModels.Catalog;
 
 namespace OnlineShop.Web.Controllers;
@@ -16,17 +17,18 @@ public class ProductController : Controller
     }
 
     /// <summary>
-    /// Каталог товаров с опциональным поиском по querystring (?query=...).
+    /// Каталог с опциональными query (поиск) и category (фильтр).
     /// </summary>
-    public async Task<IActionResult> Index(string? query, CancellationToken ct)
+    public async Task<IActionResult> Index(string? query, ProductCategory? category, CancellationToken ct)
     {
-        var dtos = string.IsNullOrWhiteSpace(query)
-            ? await _products.GetAllAsync(includeUnavailable: false, ct)
-            : await _products.SearchAsync(query, ct);
+        // SearchAsync обрабатывает оба фильтра + IsAvailable. Если query пустой и category null —
+        // вернёт все доступные товары.
+        var dtos = await _products.SearchAsync(query, category, ct);
 
         var model = new ProductListViewModel
         {
             Query = query,
+            Category = category,
             Items = dtos.Select(ProductCardViewModel.FromDto).ToList()
         };
         return View(model);
