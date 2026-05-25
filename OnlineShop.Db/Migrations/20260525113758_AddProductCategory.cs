@@ -15,7 +15,7 @@ namespace OnlineShop.Db.Migrations
                 table: "Products",
                 type: "integer",
                 nullable: false,
-                defaultValue: 3);
+                defaultValue: 0);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_Category",

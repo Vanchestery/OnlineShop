@@ -26,9 +26,12 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.ImagePath)
             .HasMaxLength(500);
 
-        builder.Property(p => p.Category)
-            .HasDefaultValue(ProductCategory.Other)
-            .IsRequired();
+        // ВАЖНО: НЕ ставить HasDefaultValue(ProductCategory.Other) — это ловушка.
+        // EF Core тогда считает свойство value-generated, и при INSERT пропускает
+        // колонку если значение свойства равно C# default'у (0 для enum). Coffee=0,
+        // поэтому Coffee-товары сохранялись с DB-default'ом Other. Бесспорно одна
+        // из топовых EF-ловушек.
+        builder.Property(p => p.Category).IsRequired();
 
         // Индекс на имя — для поиска LIKE/ILIKE.
         builder.HasIndex(p => p.Name);

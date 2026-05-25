@@ -12,7 +12,7 @@ using OnlineShop.Db;
 namespace OnlineShop.Db.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260524200327_AddProductCategory")]
+    [Migration("20260525113758_AddProductCategory")]
     partial class AddProductCategory
     {
         /// <inheritdoc />
@@ -273,9 +273,7 @@ namespace OnlineShop.Db.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("Category")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(3);
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");

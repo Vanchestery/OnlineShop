@@ -270,9 +270,7 @@ namespace OnlineShop.Db.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("Category")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(3);
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
