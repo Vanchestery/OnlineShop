@@ -26,9 +26,14 @@ public class ProductsStorage : IProductsStorage
         return await query.OrderBy(p => p.Name).ToListAsync(ct);
     }
 
-    public async Task<IReadOnlyList<Product>> SearchAsync(string? query, CancellationToken ct = default)
+    public async Task<IReadOnlyList<Product>> SearchAsync(string? query, ProductCategory? category = null, CancellationToken ct = default)
     {
         var products = _db.Products.AsNoTracking().Where(p => p.IsAvailable);
+
+        if (category.HasValue)
+        {
+            products = products.Where(p => p.Category == category.Value);
+        }
 
         if (!string.IsNullOrWhiteSpace(query))
         {

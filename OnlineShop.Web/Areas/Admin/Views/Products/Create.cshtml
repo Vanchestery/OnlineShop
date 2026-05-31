@@ -3,51 +3,67 @@
     ViewData["Title"] = "Новый товар";
 }
 
-<h1 class="h3 mb-4">Новый товар</h1>
+<div class="admin-section-head">
+    <h1 class="admin-section-title">НОВЫЙ ТОВАР</h1>
+</div>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="brutal-form">
+    <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
 
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger small"></span>
+    <div class="admin-form-grid">
+        <div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" />
+                <span asp-validation-for="Name"></span>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="Description" class="text-danger small"></span>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" rows="5"></textarea>
+                <span asp-validation-for="Description"></span>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Price" class="form-label"></label>
-                    <input asp-for="Price" class="form-control" step="0.01" />
-                    <span asp-validation-for="Price" class="text-danger small"></span>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Price"></label>
+                    <input asp-for="Price" step="0.01" />
+                    <span asp-validation-for="Price"></span>
                 </div>
-                <div class="col-md-6 mb-3 d-flex align-items-center">
-                    <div class="form-check mt-3">
-                        <input asp-for="IsAvailable" class="form-check-input" />
-                        <label asp-for="IsAvailable" class="form-check-label"></label>
-                    </div>
+                <div class="form-group">
+                    <label asp-for="Category"></label>
+                    <select asp-for="Category"
+                            asp-items="Html.GetEnumSelectList<OnlineShop.Db.Models.ProductCategory>()">
+                    </select>
+                    <span asp-validation-for="Category"></span>
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="ImageFile" class="form-label"></label>
-                <input asp-for="ImageFile" type="file" class="form-control"
-                       accept=".jpg,.jpeg,.png,.webp" />
-                <div class="form-text">Допустимые форматы: .jpg, .png, .webp. Максимум 5 MB.</div>
-                <span asp-validation-for="ImageFile" class="text-danger small"></span>
+            <div class="form-checkbox">
+                <input asp-for="IsAvailable" />
+                <label asp-for="IsAvailable">Доступен к покупке</label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile"></label>
+                <input asp-for="ImageFile" type="file" accept=".jpg,.jpeg,.png,.webp" />
+                <span asp-validation-for="ImageFile"></span>
+                <small class="admin-subhead-meta" style="margin-top: 6px;">★ .jpg .png .webp · max 5 MB</small>
+            </div>
+        </div>
+
+        <div>
+            <h4 class="admin-subhead">Превью</h4>
+            <div class="admin-image-preview">
+                <span class="admin-image-preview-empty">★ Загрузите фото</span>
             </div>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-dark">Создать</button>
-    <a asp-action="Index" class="btn btn-link">Отмена</a>
+    <div class="admin-form-actions">
+        <button type="submit" class="btn-brutal">Создать</button>
+        <a asp-action="Index" class="btn-brutal btn-brutal-outline">Отмена</a>
+    </div>
 </form>
 
 @section Scripts {

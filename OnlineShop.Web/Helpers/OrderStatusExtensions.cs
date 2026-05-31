@@ -19,15 +19,17 @@ public static class OrderStatusExtensions
     };
 
     /// <summary>
-    /// CSS-класс bootstrap badge для статуса.
+    /// CSS-класс брутал-бейджа для статуса.
+    /// Используется вместе с базовым классом .brutal-badge:
+    ///   &lt;span class="brutal-badge @status.ToBadgeClass()"&gt;@status.ToRussian()&lt;/span&gt;
     /// </summary>
     public static string ToBadgeClass(this OrderStatus status) => status switch
     {
-        OrderStatus.Created => "bg-secondary",
-        OrderStatus.Paid => "bg-info",
-        OrderStatus.Shipped => "bg-primary",
-        OrderStatus.Delivered => "bg-success",
-        OrderStatus.Cancelled => "bg-danger",
-        _ => "bg-secondary"
+        OrderStatus.Created   => "brutal-badge-gray",
+        OrderStatus.Paid      => "brutal-badge-lime",
+        OrderStatus.Shipped   => "brutal-badge-accent",
+        OrderStatus.Delivered => "brutal-badge-success",
+        OrderStatus.Cancelled => "brutal-badge-orange",
+        _ => "brutal-badge-gray"
     };
 }

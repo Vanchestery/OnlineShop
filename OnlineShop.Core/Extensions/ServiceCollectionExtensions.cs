@@ -13,7 +13,11 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCoreLayer(this IServiceCollection services)
     {
         // Сканируем сборку OnlineShop.Core и регистрируем все Profile-наследники.
-        services.AddAutoMapper(typeof(ServiceCollectionExtensions).Assembly);
+        // В AutoMapper 14+ убрали перегрузку AddAutoMapper(Assembly), оставили только
+        // с Action<IMapperConfigurationExpression>. Внутри явно вызываем AddMaps(asm).
+        // Этот синтаксис работает И в 13.x, и в 14.x — backwards-compatible.
+        services.AddAutoMapper(cfg =>
+            cfg.AddMaps(typeof(ServiceCollectionExtensions).Assembly));
 
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICartService, CartService>();

@@ -1,64 +1,74 @@
 @model OnlineShop.Web.ViewModels.Catalog.ProductDetailsViewModel
+@using OnlineShop.Web.Helpers
 @{
     ViewData["Title"] = Model.Name;
 }
 
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Главная</a></li>
-        <li class="breadcrumb-item"><a asp-controller="Product" asp-action="Index">Каталог</a></li>
-        <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
-    </ol>
+<nav class="brutal-breadcrumb">
+    <a asp-controller="Home" asp-action="Index">★ Главная</a>
+    <span>/</span>
+    <a asp-controller="Product" asp-action="Index">Каталог</a>
+    <span>/</span>
+    <a asp-controller="Product" asp-action="Index" asp-route-category="@Model.Category">@Model.Category.ToRussian()</a>
+    <span>/</span>
+    <span class="current">@Model.Name</span>
 </nav>
 
-<div class="row g-4">
-    <div class="col-md-5">
-        @if (!string.IsNullOrEmpty(Model.ImagePath))
-        {
-            <img src="@Model.ImagePath" class="img-fluid rounded" alt="@Model.Name" />
-        }
-        else
-        {
-            <div class="product-image-placeholder product-image-placeholder-lg">
-                <span>@Model.Name.Substring(0, 1).ToUpper()</span>
-            </div>
-        }
-    </div>
-
-    <div class="col-md-7">
-        <h1 class="h2 mb-3">@Model.Name</h1>
-        <p class="fs-3 fw-bold mb-4">@Model.Price.ToString("N2") ₽</p>
-
-        @if (!Model.IsAvailable)
-        {
-            <div class="alert alert-warning">Товар временно недоступен к покупке.</div>
-        }
-
-        <p class="text-secondary mb-4" style="white-space: pre-line">@Model.Description</p>
-
-        <div class="d-flex gap-2 mb-4">
-            @if (Model.IsAvailable)
+<section class="section-divider">
+    <div class="product-detail-grid">
+        <div class="product-detail-img">
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
             {
-                <form asp-controller="Cart" asp-action="Add" method="post" class="d-inline">
-                    <input type="hidden" name="productId" value="@Model.Id" />
-                    <input type="hidden" name="quantity" value="1" />
-                    <input type="hidden" name="returnUrl" value="@Url.Action("Details", "Product", new { id = Model.Id })" />
-                    <button type="submit" class="btn btn-dark btn-lg">В корзину</button>
-                </form>
+                <img src="@Model.ImagePath" alt="@Model.Name" />
             }
             else
             {
-                <button type="button" class="btn btn-dark btn-lg" disabled>В корзину</button>
+                <div class="product-img-placeholder">
+                    @(Model.Name.Length > 0 ? Model.Name.Substring(0, 1).ToUpper() : "?")
+                </div>
             }
-            @await Component.InvokeAsync("FavouriteButton", new { productId = Model.Id })
+        </div>
+
+        <div class="product-detail-info">
+            <div class="product-detail-eyebrow">
+                ★ @Model.Category.ToRussian() · BREWCO
+            </div>
+            <h1 class="product-detail-name">@Model.Name</h1>
+            <div class="product-detail-price">@Model.Price.ToString("N0") ₽</div>
+
+            <p class="product-detail-desc">@Model.Description</p>
+
+            @if (!Model.IsAvailable)
+            {
+                <div class="brutal-alert" style="margin-bottom: 24px;">
+                    <span>★ Товар временно недоступен к покупке</span>
+                </div>
+            }
+
+            <div class="product-detail-actions">
+                @if (Model.IsAvailable)
+                {
+                    <form asp-controller="Cart" asp-action="Add" method="post" style="flex: 1; display: flex;">
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        <input type="hidden" name="quantity" value="1" />
+                        <input type="hidden" name="returnUrl" value="@Url.Action("Details", "Product", new { id = Model.Id })" />
+                        <button type="submit" class="btn-brutal btn-brutal-lg" style="flex: 1;">В корзину</button>
+                    </form>
+                }
+                else
+                {
+                    <button type="button" class="btn-brutal btn-brutal-lg" style="flex: 1;" disabled>Недоступен</button>
+                }
+
+                @await Component.InvokeAsync("FavouriteButton", new { productId = Model.Id })
+            </div>
         </div>
     </div>
-</div>
 
-<hr class="my-5" />
+    <div class="section-head">
+        <h2 class="section-title">ОТЗЫВЫ<span class="accent">.</span></h2>
+    </div>
 
-<section>
-    <h2 class="h4 mb-3">Отзывы</h2>
     @await Component.InvokeAsync("ProductReviews", new { productId = Model.Id })
 </section>
 

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using OnlineShop.Core.Dtos;
+using OnlineShop.Db.Models;
 
 namespace OnlineShop.Web.Areas.Admin.ViewModels;
 
@@ -24,6 +25,10 @@ public class ProductFormViewModel
     [Display(Name = "Цена (₽)")]
     public decimal Price { get; set; }
 
+    [Required(ErrorMessage = "Категория обязательна")]
+    [Display(Name = "Категория")]
+    public ProductCategory Category { get; set; } = ProductCategory.Coffee;
+
     [Display(Name = "Доступен к покупке")]
     public bool IsAvailable { get; set; } = true;
 
@@ -45,6 +50,7 @@ public class ProductFormViewModel
         Name = dto.Name,
         Description = dto.Description,
         Price = dto.Price,
+        Category = dto.Category,
         IsAvailable = dto.IsAvailable,
         ExistingImagePath = dto.ImagePath
     };

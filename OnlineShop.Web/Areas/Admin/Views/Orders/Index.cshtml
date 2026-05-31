@@ -6,16 +6,19 @@
     var currentFilter = ViewData["FilterStatus"] as OrderStatus?;
 }
 
-<h1 class="h3 mb-3">Заказы <small class="text-muted">(@Model.Count)</small></h1>
+<div class="admin-section-head">
+    <h1 class="admin-section-title">
+        ЗАКАЗЫ
+        <span class="count">★ @Model.Count</span>
+    </h1>
+</div>
 
-<div class="mb-3">
-    <a asp-action="Index" class="btn btn-sm @(currentFilter is null ? "btn-dark" : "btn-outline-secondary")">
-        Все
-    </a>
+<div class="admin-filter-row">
+    <a asp-action="Index" class="tag @(currentFilter is null ? "active" : "")">Все</a>
     @foreach (var status in Enum.GetValues<OrderStatus>())
     {
         <a asp-action="Index" asp-route-status="@status"
-           class="btn btn-sm @(currentFilter == status ? "btn-dark" : "btn-outline-secondary")">
+           class="tag @(currentFilter == status ? "active" : "")">
             @status.ToRussian()
         </a>
     }
@@ -23,41 +26,44 @@
 
 @if (Model.Count == 0)
 {
-    <div class="alert alert-light text-center">Заказов нет.</div>
+    <div class="empty-state">
+        <div class="empty-state-icon">∅</div>
+        <p class="empty-state-text">Заказов не найдено</p>
+    </div>
 }
 else
 {
-    <div class="table-responsive">
-        <table class="table align-middle">
-            <thead>
+    <div class="admin-table-wrap">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Клиент</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th>Товаров</th>
+                <th class="text-end">Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Model)
+            {
                 <tr>
-                    <th>№</th>
-                    <th>Клиент</th>
-                    <th>Дата</th>
-                    <th>Статус</th>
-                    <th>Товаров</th>
-                    <th class="text-end">Сумма</th>
-                    <th></th>
+                    <td><span class="id-code">@o.Id.ToString()[..8]</span></td>
+                    <td>@o.UserFullName</td>
+                    <td>@o.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td><span class="brutal-badge @o.Status.ToBadgeClass()">@o.Status.ToRussian()</span></td>
+                    <td>@o.ItemsCount шт.</td>
+                    <td class="text-end fw-bold">@o.Total.ToString("N0") ₽</td>
+                    <td>
+                        <div class="admin-actions-cell">
+                            <a asp-action="Details" asp-route-id="@o.Id" class="btn-brutal btn-brutal-sm btn-brutal-outline">Открыть</a>
+                        </div>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var o in Model)
-                {
-                    <tr>
-                        <td><code>@o.Id.ToString()[..8]</code></td>
-                        <td>@o.UserFullName</td>
-                        <td>@o.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                        <td><span class="badge @o.Status.ToBadgeClass()">@o.Status.ToRussian()</span></td>
-                        <td>@o.ItemsCount шт.</td>
-                        <td class="text-end fw-bold">@o.Total.ToString("N2") ₽</td>
-                        <td class="text-end">
-                            <a asp-action="Details" asp-route-id="@o.Id" class="btn btn-sm btn-outline-secondary">
-                                Открыть
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            }
+        </tbody>
+    </table>
     </div>
 }

@@ -3,40 +3,43 @@
     ViewData["Title"] = "Вход";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <h1 class="h3 mb-4">Вход</h1>
+<section class="section-divider">
+    <div class="auth-wrap">
+        <div class="auth-header">
+            <h1 class="auth-title">ВХОД<span class="accent">.</span></h1>
+            <p class="auth-subtitle">★ Войдите в свой аккаунт BREWCO</p>
+        </div>
 
-        <form asp-action="Login" method="post">
+        <form asp-action="Login" method="post" class="brutal-form">
             <input type="hidden" asp-for="ReturnUrl" />
 
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
 
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" autocomplete="email" />
-                <span asp-validation-for="Email" class="text-danger small"></span>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" autocomplete="email" />
+                <span asp-validation-for="Email"></span>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" autocomplete="current-password" />
-                <span asp-validation-for="Password" class="text-danger small"></span>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" autocomplete="current-password" />
+                <span asp-validation-for="Password"></span>
             </div>
 
-            <div class="mb-3 form-check">
-                <input asp-for="RememberMe" class="form-check-input" />
-                <label asp-for="RememberMe" class="form-check-label"></label>
+            <div class="form-checkbox">
+                <input asp-for="RememberMe" id="rememberMe" />
+                <label for="rememberMe">Запомнить меня</label>
             </div>
 
-            <button type="submit" class="btn btn-dark w-100">Войти</button>
+            <button type="submit" class="btn-brutal btn-brutal-lg w-100">Войти</button>
         </form>
 
-        <p class="text-center mt-3 small text-muted">
-            Нет аккаунта? <a asp-action="Register">Зарегистрироваться</a>
+        <p class="auth-footer">
+            Нет аккаунта? <a asp-action="Register">Регистрация</a>
         </p>
     </div>
-</div>
+</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

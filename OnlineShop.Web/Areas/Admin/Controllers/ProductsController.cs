@@ -52,6 +52,7 @@ public class ProductsController : Controller
                 Name = model.Name,
                 Description = model.Description,
                 Price = model.Price,
+                Category = model.Category,
                 IsAvailable = model.IsAvailable,
                 ImagePath = imagePath
             };
@@ -90,6 +91,7 @@ public class ProductsController : Controller
                 Name = model.Name,
                 Description = model.Description,
                 Price = model.Price,
+                Category = model.Category,
                 IsAvailable = model.IsAvailable,
                 ImagePath = imagePath
             };

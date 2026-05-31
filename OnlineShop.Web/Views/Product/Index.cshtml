@@ -1,46 +1,109 @@
 @model OnlineShop.Web.ViewModels.Catalog.ProductListViewModel
+@using OnlineShop.Web.Helpers
+@using OnlineShop.Db.Models
 @{
     ViewData["Title"] = "Каталог";
+    var currentUrl = Url.Action("Index", "Product", new { query = Model.Query, category = Model.Category });
 }
 
-<div class="d-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0">Каталог</h1>
-    <small class="text-muted">Найдено: @Model.TotalCount</small>
-</div>
+<section class="section-divider">
+    <div class="section-head">
+        <h2 class="section-title">
+            КАТАЛОГ<span class="accent">.</span>
+            <small class="d-block label-mono text-brutal-muted mt-2">@Model.TotalCount товаров</small>
+        </h2>
+        <div class="filter-row">
+            <a asp-action="Index" asp-route-query="@Model.Query"
+               class="tag @(Model.Category is null ? "active" : "")">Все</a>
+            @foreach (var category in Enum.GetValues<ProductCategory>())
+            {
+                <a asp-action="Index" asp-route-query="@Model.Query" asp-route-category="@category"
+                   class="tag @(Model.Category == category ? "active" : "")">
+                    @category.ToRussian()
+                </a>
+            }
+        </div>
+    </div>
 
-<form method="get" asp-action="Index" class="mb-4">
-    <div class="input-group">
+    <form method="get" asp-action="Index" class="brutal-search">
+        @if (Model.Category.HasValue)
+        {
+            <input type="hidden" name="category" value="@Model.Category" />
+        }
         <input type="search" name="query" value="@Model.Query"
-               class="form-control" placeholder="Поиск по названию или описанию..." />
-        <button type="submit" class="btn btn-outline-dark">Найти</button>
+               placeholder="Поиск по названию или описанию..." autocomplete="off" />
+        <button type="submit">Найти</button>
         @if (!string.IsNullOrWhiteSpace(Model.Query))
         {
-            <a asp-action="Index" class="btn btn-outline-secondary">Сбросить</a>
+            <a asp-action="Index" asp-route-category="@Model.Category" class="reset">×</a>
         }
-    </div>
-</form>
+    </form>
 
-@if (Model.Items.Count == 0)
-{
-    <div class="alert alert-light text-center py-5">
-        @if (string.IsNullOrWhiteSpace(Model.Query))
-        {
-            <span>В каталоге пока ничего нет.</span>
-        }
-        else
-        {
-            <span>По запросу <strong>«@Model.Query»</strong> ничего не найдено.</span>
-        }
-    </div>
-}
-else
-{
-    <div class="row g-4">
-        @foreach (var item in Model.Items)
-        {
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <partial name="_ProductCard" model="item" />
-            </div>
-        }
-    </div>
-}
+    @if (Model.Items.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">∅</div>
+            @if (!string.IsNullOrWhiteSpace(Model.Query))
+            {
+                <p class="empty-state-text">По запросу «@Model.Query» ничего не найдено</p>
+            }
+            else if (Model.Category.HasValue)
+            {
+                <p class="empty-state-text">В категории «@Model.Category.Value.ToRussian()» пока пусто</p>
+            }
+            else
+            {
+                <p class="empty-state-text">В каталоге пока ничего нет</p>
+            }
+            <a asp-action="Index" class="btn-brutal">Сбросить фильтры</a>
+        </div>
+    }
+    else
+    {
+        <div class="products-grid">
+            @for (var i = 0; i < Model.Items.Count; i++)
+            {
+                var item = Model.Items[i];
+                var num = (i + 1).ToString("D3");
+                var detailsUrl = Url.Action("Details", "Product", new { id = item.Id });
+                <div class="product-card">
+                    <a class="product-card-main" href="@detailsUrl">
+                        <div class="product-img-wrap">
+                            @if (!string.IsNullOrEmpty(item.ImagePath))
+                            {
+                                <img src="@item.ImagePath" alt="@item.Name" />
+                            }
+                            else
+                            {
+                                <div class="product-img-placeholder">
+                                    @(item.Name.Length > 0 ? item.Name.Substring(0, 1).ToUpper() : "?")
+                                </div>
+                            }
+                            <span class="product-num">№ @num · @item.Category.ToRussian()</span>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-name">@item.Name</h3>
+                            <p class="product-desc">@item.Category.ToRussian()</p>
+                        </div>
+                    </a>
+                    <div class="product-footer">
+                        <div class="price">@item.Price.ToString("N0") ₽</div>
+                        @if (item.IsAvailable)
+                        {
+                            <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
+                                <input type="hidden" name="productId" value="@item.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <input type="hidden" name="returnUrl" value="@currentUrl" />
+                                <button type="submit" class="add-btn" title="В корзину">+</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button type="button" class="add-btn" disabled title="Недоступен">−</button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>

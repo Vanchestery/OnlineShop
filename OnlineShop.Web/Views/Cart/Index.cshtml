@@ -3,24 +3,37 @@
     ViewData["Title"] = "Корзина";
 }
 
-<h1 class="h3 mb-4">Корзина</h1>
-
-@if (Model.IsEmpty)
-{
-    <div class="alert alert-light text-center py-5">
-        <p class="mb-3">Корзина пуста.</p>
-        <a asp-controller="Product" asp-action="Index" class="btn btn-dark">Перейти в каталог</a>
+<section class="section-divider">
+    <div class="section-head">
+        <h2 class="section-title">КОРЗИНА<span class="accent">.</span></h2>
+        <div class="label-mono text-brutal-muted">
+            @if (Model.IsEmpty)
+            {
+                <span>★ Пусто</span>
+            }
+            else
+            {
+                <span>★ @Model.Items.Count позиций</span>
+            }
+        </div>
     </div>
-}
-else
-{
-    <div class="table-responsive">
-        <table class="table align-middle">
+
+    @if (Model.IsEmpty)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">∅</div>
+            <p class="empty-state-text">Корзина пуста</p>
+            <a asp-controller="Product" asp-action="Index" class="btn-brutal">Открыть каталог</a>
+        </div>
+    }
+    else
+    {
+        <table class="cart-table">
             <thead>
                 <tr>
                     <th>Товар</th>
                     <th class="text-end">Цена</th>
-                    <th class="text-center">Количество</th>
+                    <th class="text-center">Кол-во</th>
                     <th class="text-end">Подсумма</th>
                     <th></th>
                 </tr>
@@ -30,34 +43,43 @@ else
                 {
                     <tr>
                         <td>
-                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId"
-                               class="text-decoration-none text-dark">
-                                @item.ProductName
-                            </a>
+                            <div class="cart-item-cell">
+                                @if (!string.IsNullOrEmpty(item.ProductImagePath))
+                                {
+                                    <img src="@item.ProductImagePath" alt="@item.ProductName" class="cart-item-thumb" />
+                                }
+                                else
+                                {
+                                    <div class="cart-item-thumb-placeholder">
+                                        @(item.ProductName.Length > 0 ? item.ProductName.Substring(0, 1).ToUpper() : "?")
+                                    </div>
+                                }
+                                <a class="cart-item-name-text"
+                                   asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId">
+                                    @item.ProductName
+                                </a>
+                            </div>
                         </td>
-                        <td class="text-end">@item.ProductPrice.ToString("N2") ₽</td>
+                        <td class="text-end">@item.ProductPrice.ToString("N0") ₽</td>
                         <td class="text-center">
-                            <div class="btn-group btn-group-sm" role="group">
-                                <form asp-action="Decrease" method="post" class="d-inline">
+                            <div class="qty-controls">
+                                <form asp-action="Decrease" method="post">
                                     <input type="hidden" name="productId" value="@item.ProductId" />
-                                    <button type="submit" class="btn btn-outline-secondary"
-                                            title="Уменьшить">−</button>
+                                    <button type="submit" class="qty-btn" title="Уменьшить">−</button>
                                 </form>
-                                <span class="btn btn-outline-secondary disabled">@item.Quantity</span>
-                                <form asp-action="Add" method="post" class="d-inline">
+                                <span class="qty-val">@item.Quantity</span>
+                                <form asp-action="Add" method="post">
                                     <input type="hidden" name="productId" value="@item.ProductId" />
                                     <input type="hidden" name="quantity" value="1" />
-                                    <button type="submit" class="btn btn-outline-secondary"
-                                            title="Увеличить">+</button>
+                                    <button type="submit" class="qty-btn" title="Увеличить">+</button>
                                 </form>
                             </div>
                         </td>
-                        <td class="text-end fw-bold">@item.Subtotal.ToString("N2") ₽</td>
+                        <td class="text-end fw-bold">@item.Subtotal.ToString("N0") ₽</td>
                         <td class="text-end">
-                            <form asp-action="Remove" method="post" class="d-inline">
+                            <form asp-action="Remove" method="post" style="display: inline-block;">
                                 <input type="hidden" name="productId" value="@item.ProductId" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                        title="Удалить">×</button>
+                                <button type="submit" class="remove-btn" title="Удалить">×</button>
                             </form>
                         </td>
                     </tr>
@@ -65,23 +87,21 @@ else
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3" class="text-end fw-bold">Итого:</td>
-                    <td class="text-end fw-bold fs-5">@Model.Total.ToString("N2") ₽</td>
+                    <td colspan="3" style="text-align: right; font-size: 14px; font-family: 'Space Mono', monospace; letter-spacing: 0.15em; text-transform: uppercase;">★ ИТОГО:</td>
+                    <td class="text-end">@Model.Total.ToString("N0") ₽</td>
                     <td></td>
                 </tr>
             </tfoot>
         </table>
-    </div>
 
-    <div class="d-flex justify-content-between mt-4">
-        <form asp-action="Clear" method="post">
-            <button type="submit" class="btn btn-outline-secondary"
-                    onclick="return confirm('Очистить корзину?')">
-                Очистить корзину
-            </button>
-        </form>
-        <a asp-controller="Order" asp-action="Checkout" class="btn btn-dark btn-lg">
-            Оформить заказ
-        </a>
-    </div>
-}
+        <div class="cart-actions">
+            <form asp-action="Clear" method="post"
+                  onsubmit="return confirm('Очистить всю корзину?');">
+                <button type="submit" class="btn-brutal btn-brutal-outline">Очистить</button>
+            </form>
+            <a asp-controller="Order" asp-action="Checkout" class="btn-brutal btn-brutal-lg">
+                Оформить заказ →
+            </a>
+        </div>
+    }
+</section>

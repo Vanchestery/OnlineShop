@@ -1,4 +1,5 @@
 using OnlineShop.Core.Dtos;
+using OnlineShop.Db.Models;
 
 namespace OnlineShop.Web.Areas.Admin.ViewModels;
 
@@ -7,6 +8,7 @@ public class ProductRowViewModel
     public Guid Id { get; init; }
     public string Name { get; init; } = string.Empty;
     public decimal Price { get; init; }
+    public ProductCategory Category { get; init; }
     public string? ImagePath { get; init; }
     public bool IsAvailable { get; init; }
 
@@ -15,6 +17,7 @@ public class ProductRowViewModel
         Id = dto.Id,
         Name = dto.Name,
         Price = dto.Price,
+        Category = dto.Category,
         ImagePath = dto.ImagePath,
         IsAvailable = dto.IsAvailable
     };
