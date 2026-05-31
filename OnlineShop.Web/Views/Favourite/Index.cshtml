@@ -3,51 +3,85 @@
     ViewData["Title"] = "Избранное";
 }
 
-<h1 class="h3 mb-4">Избранное</h1>
-
-@if (Model.IsEmpty)
-{
-    <div class="alert alert-light text-center py-5">
-        <p class="mb-3">В избранном пока пусто.</p>
-        <a asp-controller="Product" asp-action="Index" class="btn btn-dark">Перейти в каталог</a>
+<section class="section-divider">
+    <div class="section-head">
+        <h2 class="section-title">ИЗБРАННОЕ<span class="accent">.</span></h2>
+        <div class="label-mono text-brutal-muted">
+            ★ @Model.Items.Count
+            @(Model.Items.Count == 1 ? "товар" : Model.Items.Count < 5 ? "товара" : "товаров")
+        </div>
     </div>
-}
-else
-{
-    <div class="row g-4">
-        @foreach (var item in Model.Items)
-        {
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card h-100 product-card">
-                    @if (!string.IsNullOrEmpty(item.ProductImagePath))
-                    {
-                        <img src="@item.ProductImagePath" class="card-img-top product-image" alt="@item.ProductName" />
-                    }
-                    else
-                    {
-                        <div class="product-image-placeholder">
-                            <span>@(item.ProductName.Length > 0 ? item.ProductName.Substring(0, 1).ToUpper() : "?")</span>
+
+    @if (Model.IsEmpty)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">∅</div>
+            <p class="empty-state-text">В избранном пока пусто</p>
+            <a asp-controller="Product" asp-action="Index" class="btn-brutal">Открыть каталог</a>
+        </div>
+    }
+    else
+    {
+        <div class="products-grid">
+            @for (var i = 0; i < Model.Items.Count; i++)
+            {
+                var item = Model.Items[i];
+                var num = (i + 1).ToString("D3");
+                <div class="product-card product-card-fav">
+                    <a class="product-card-main"
+                       asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId">
+                        <div class="product-img-wrap">
+                            @if (!string.IsNullOrEmpty(item.ProductImagePath))
+                            {
+                                <img src="@item.ProductImagePath" alt="@item.ProductName" />
+                            }
+                            else
+                            {
+                                <div class="product-img-placeholder">
+                                    @(item.ProductName.Length > 0 ? item.ProductName.Substring(0, 1).ToUpper() : "?")
+                                </div>
+                            }
+                            <span class="product-num">★ № @num</span>
                         </div>
-                    }
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">
-                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId"
-                               class="text-decoration-none text-dark">@item.ProductName</a>
-                        </h5>
-                        @if (!item.ProductIsAvailable)
+                        <div class="product-body">
+                            <h3 class="product-name">@item.ProductName</h3>
+                            <p class="product-desc">
+                                @if (!item.ProductIsAvailable)
+                                {
+                                    <span style="color: var(--orange); font-weight: 700;">★ Недоступен</span>
+                                }
+                                else
+                                {
+                                    <span>@item.AddedAt.ToLocalTime().ToString("dd.MM.yyyy")</span>
+                                }
+                            </p>
+                        </div>
+                    </a>
+
+                    <div class="product-footer">
+                        <div class="price">@item.ProductPrice.ToString("N0") ₽</div>
+
+                        @if (item.ProductIsAvailable)
                         {
-                            <span class="badge bg-secondary mb-2 align-self-start">недоступен</span>
+                            <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <input type="hidden" name="returnUrl" value="@Url.Action("Index", "Favourite")" />
+                                <button type="submit" class="add-cart-btn">★ В корзину</button>
+                            </form>
                         }
-                        <p class="card-text mt-auto mb-2">
-                            <strong class="fs-5">@item.ProductPrice.ToString("N2") ₽</strong>
-                        </p>
-                        <form asp-controller="Favourite" asp-action="Remove" method="post">
+                        else
+                        {
+                            <button type="button" class="add-cart-btn" disabled>★ Недоступен</button>
+                        }
+
+                        <form asp-controller="Favourite" asp-action="Remove" method="post" class="m-0">
                             <input type="hidden" name="productId" value="@item.ProductId" />
-                            <button type="submit" class="btn btn-sm btn-outline-danger w-100">Убрать</button>
+                            <button type="submit" class="remove-fav-btn">× Убрать</button>
                         </form>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+</section>
