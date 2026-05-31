@@ -8,21 +8,21 @@
     @* Аноним — клик ведёт на login с returnUrl на эту же страницу *@
     <a asp-controller="Account" asp-action="Login"
        asp-route-returnUrl="@returnUrl"
-       class="btn btn-outline-secondary"
+       class="heart-btn"
        title="Войдите чтобы добавить в избранное">♡</a>
 }
 else
 {
-    <form asp-controller="Favourite" asp-action="Toggle" method="post" class="d-inline">
+    <form asp-controller="Favourite" asp-action="Toggle" method="post" class="m-0">
         <input type="hidden" name="productId" value="@Model.ProductId" />
         <input type="hidden" name="returnUrl" value="@returnUrl" />
         @if (Model.IsFavourite)
         {
-            <button type="submit" class="btn btn-danger" title="Убрать из избранного">❤</button>
+            <button type="submit" class="heart-btn is-favourite" title="Убрать из избранного">❤</button>
         }
         else
         {
-            <button type="submit" class="btn btn-outline-dark" title="Добавить в избранное">♡</button>
+            <button type="submit" class="heart-btn" title="Добавить в избранное">♡</button>
         }
     </form>
 }

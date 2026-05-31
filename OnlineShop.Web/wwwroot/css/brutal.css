@@ -749,6 +749,446 @@ h1, h2, h3, h4, h5, h6, .heading {
     margin-bottom: 24px;
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   Sub-phase C: PRODUCT DETAILS, CART, REVIEWS, BRUTAL FORMS
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Breadcrumb ───────────────────────────────────────────────────────── */
+
+.brutal-breadcrumb {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 16px 60px;
+    background: var(--white);
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.brutal-breadcrumb a { color: var(--muted); text-decoration: none; }
+.brutal-breadcrumb a:hover { color: var(--black); }
+.brutal-breadcrumb .current { color: var(--black); font-weight: 700; }
+
+/* ── Product details ──────────────────────────────────────────────────── */
+
+.product-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 3px solid var(--black);
+    background: var(--white);
+    margin-bottom: 80px;
+}
+
+.product-detail-img {
+    border-right: 3px solid var(--black);
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--gray);
+    position: relative;
+}
+.product-detail-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.product-detail-img .product-img-placeholder { aspect-ratio: 1 / 1; font-size: 120px; }
+
+.product-detail-info {
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.product-detail-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+.product-detail-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+    letter-spacing: 0.01em;
+    margin: 0 0 24px 0;
+    color: var(--black);
+}
+.product-detail-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--orange);
+    line-height: 1;
+    margin-bottom: 32px;
+    letter-spacing: 0.02em;
+}
+.product-detail-desc {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 40px;
+    white-space: pre-line;
+}
+.product-detail-actions {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+}
+.btn-brutal-lg {
+    padding: 24px 48px;
+    font-size: 12px;
+    flex: 1;
+}
+
+/* Heart button (брутал-сердечко) */
+.heart-btn {
+    width: 64px;
+    height: 64px;
+    border: 3px solid var(--black);
+    background: transparent;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: var(--black);
+}
+.heart-btn:hover { background: var(--black); color: var(--lime); }
+.heart-btn.is-favourite {
+    background: var(--orange);
+    color: var(--white);
+    border-color: var(--orange);
+}
+.heart-btn.is-favourite:hover { background: var(--black); border-color: var(--black); color: var(--lime); }
+
+/* ── Reviews ──────────────────────────────────────────────────────────── */
+
+.reviews-section { margin-top: 0; }
+
+.avg-rating-bar {
+    background: var(--black);
+    color: var(--lime);
+    padding: 24px 32px;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    margin-bottom: 32px;
+    border: 3px solid var(--black);
+    flex-wrap: wrap;
+}
+.avg-rating-stars {
+    color: var(--orange);
+    font-size: 32px;
+    letter-spacing: 4px;
+    line-height: 1;
+}
+.avg-rating-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+}
+.avg-rating-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.review {
+    border: 3px solid var(--black);
+    background: var(--white);
+    padding: 24px;
+    margin-bottom: 16px;
+}
+.review-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.review-author-block {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+.review-author {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    line-height: 1;
+}
+.review-stars {
+    color: var(--orange);
+    font-size: 16px;
+    letter-spacing: 2px;
+    line-height: 1;
+}
+.review-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.review-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+    margin: 0;
+    white-space: pre-line;
+}
+
+.review-form-block {
+    border: 3px solid var(--black);
+    background: var(--white);
+    padding: 32px;
+    margin-bottom: 32px;
+}
+.review-form-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    margin: 0 0 20px 0;
+    letter-spacing: 0.02em;
+}
+
+.login-prompt {
+    background: var(--accent);
+    color: var(--lime);
+    padding: 24px 32px;
+    border: 3px solid var(--black);
+    margin-bottom: 32px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.login-prompt a {
+    color: var(--white);
+    text-decoration: underline;
+    font-weight: 700;
+}
+.login-prompt a:hover { color: var(--lime); }
+
+/* ── Cart table ───────────────────────────────────────────────────────── */
+
+.cart-table {
+    width: 100%;
+    border: 3px solid var(--black);
+    border-collapse: collapse;
+    margin-bottom: 32px;
+    background: var(--white);
+}
+.cart-table th {
+    background: var(--black);
+    color: var(--lime);
+    text-align: left;
+    padding: 14px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-bottom: 3px solid var(--black);
+}
+.cart-table th.text-end { text-align: right; }
+.cart-table th.text-center { text-align: center; }
+.cart-table td {
+    padding: 16px 20px;
+    border-top: 3px solid var(--black);
+    vertical-align: middle;
+    background: var(--white);
+}
+.cart-table tbody tr:first-child td { border-top: none; }
+.cart-table tfoot td {
+    background: var(--accent);
+    color: var(--lime);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    border-top: 3px solid var(--black);
+    padding: 20px;
+}
+
+.cart-item-cell {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.cart-item-thumb {
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--black);
+    object-fit: cover;
+    flex-shrink: 0;
+    display: block;
+}
+.cart-item-thumb-placeholder {
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--black);
+    background: var(--gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: #999;
+    flex-shrink: 0;
+}
+.cart-item-name-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    text-decoration: none;
+    color: var(--black);
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    transition: color 0.2s;
+}
+.cart-item-name-text:hover { color: var(--orange); }
+
+/* Quantity controls */
+.qty-controls {
+    display: inline-flex;
+    border: 2px solid var(--black);
+}
+.qty-controls form { margin: 0; }
+.qty-btn {
+    background: var(--white);
+    border: none;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    transition: background 0.2s;
+}
+.qty-btn:hover { background: var(--lime); }
+.qty-val {
+    padding: 6px 16px;
+    border-left: 2px solid var(--black);
+    border-right: 2px solid var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.remove-btn {
+    background: transparent;
+    border: 2px solid var(--black);
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+}
+.remove-btn:hover { background: var(--orange); color: var(--white); border-color: var(--orange); }
+
+.cart-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.cart-actions .btn-brutal-lg { flex: none; }
+
+/* ── Brutal forms (общее) ────────────────────────────────────────────── */
+
+.brutal-form .form-group { margin-bottom: 24px; }
+
+.brutal-form label,
+.brutal-form .form-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 400;
+}
+
+.brutal-form input[type="text"],
+.brutal-form input[type="email"],
+.brutal-form input[type="password"],
+.brutal-form input[type="number"],
+.brutal-form input[type="search"],
+.brutal-form input[type="tel"],
+.brutal-form input[type="url"],
+.brutal-form textarea,
+.brutal-form select {
+    width: 100%;
+    border: 3px solid var(--black);
+    background: var(--white);
+    padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--black);
+    outline: none;
+    border-radius: 0;
+    appearance: none;
+}
+.brutal-form input:focus,
+.brutal-form textarea:focus,
+.brutal-form select:focus {
+    border-color: var(--accent);
+    background: #fdfcf8;
+}
+.brutal-form textarea { resize: vertical; min-height: 100px; }
+
+.brutal-form select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' stroke='%230d0d0d' stroke-width='2' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+
+.brutal-form .text-danger,
+.brutal-form .field-validation-error {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-top: 4px;
+    display: block;
+}
+
+.brutal-form .validation-summary-errors {
+    background: var(--orange);
+    color: var(--white);
+    border: 3px solid var(--black);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.brutal-form .validation-summary-errors ul {
+    margin: 0;
+    padding-left: 20px;
+}
+.brutal-form .validation-summary-valid { display: none; }
+
 /* ── Mobile ───────────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -764,4 +1204,287 @@ h1, h2, h3, h4, h5, h6, .heading {
     .hero-img-wrap { min-height: 300px; }
 
     .section-head { flex-direction: column; align-items: flex-start; gap: 20px; }
+
+    .product-detail-grid { grid-template-columns: 1fr; }
+    .product-detail-img { border-right: none; border-bottom: 3px solid var(--black); aspect-ratio: 4 / 3; }
+    .product-detail-info { padding: 32px 24px; }
+
+    .brutal-breadcrumb { padding: 12px 20px; flex-wrap: wrap; }
+
+    .cart-table { font-size: 13px; }
+    .cart-table th { padding: 10px 8px; font-size: 9px; letter-spacing: 0.1em; }
+    .cart-table td { padding: 10px 6px; }
+
+    /* Не разрывать "1,290 ₽" — все цены идут одной строкой */
+    .cart-table td.text-end { white-space: nowrap; }
+
+    /* Меньше миниатюра */
+    .cart-item-thumb,
+    .cart-item-thumb-placeholder { width: 44px; height: 44px; }
+
+    /* Меньше название товара */
+    .cart-item-name-text { font-size: 14px; }
+    .cart-item-cell { gap: 10px; }
+
+    /* Маленький qty-control чтобы влез по ширине */
+    .qty-btn { padding: 4px 8px; font-size: 12px; }
+    .qty-val { padding: 4px 10px; font-size: 12px; }
+
+    /* Footer-строка "ИТОГО" — уменьшить Bebas чтобы не переносилось */
+    .cart-table tfoot td {
+        font-size: 20px;
+        padding: 14px 10px;
+        white-space: nowrap;
+    }
+
+    /* Кнопки Очистить/Оформить — на всю ширину и в столбик */
+    .cart-actions { flex-direction: column; align-items: stretch; }
+    .cart-actions .btn-brutal,
+    .cart-actions .btn-brutal-lg { width: 100%; padding: 18px 24px; }
+
+    /* Remove button чуть меньше */
+    .remove-btn { width: 30px; height: 30px; font-size: 16px; }
+
+    /* Reviews/Forms на мобильном */
+    .product-detail-grid { grid-template-columns: 1fr; }
+    .avg-rating-bar { padding: 16px 20px; gap: 16px; }
+    .avg-rating-num { font-size: 40px; }
+    .review-form-block { padding: 20px; }
+}
+
+@media (max-width: 480px) {
+    /* Совсем узкий — ещё компактнее */
+    .cart-table th, .cart-table td { padding: 8px 4px; }
+    .cart-item-thumb,
+    .cart-item-thumb-placeholder { width: 36px; height: 36px; }
+    .cart-item-name-text { font-size: 12px; }
+    .qty-btn { padding: 4px 6px; }
+    .qty-val { padding: 4px 8px; }
+    .cart-table tfoot td { font-size: 16px; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   Sub-phase D: AUTH + PROFILE + ORDER HISTORY + ACCESS DENIED + BADGES
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Auth (Login / Register / ChangePassword) ────────────────────────── */
+
+.auth-wrap {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 20px 0 40px;
+}
+.auth-header { margin-bottom: 32px; }
+.auth-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 8vw, 96px);
+    line-height: 1;
+    letter-spacing: 0.01em;
+    margin: 0 0 8px 0;
+    color: var(--black);
+}
+.auth-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin: 0;
+}
+.auth-footer {
+    text-align: center;
+    margin-top: 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.auth-footer a {
+    color: var(--orange);
+    text-decoration: underline;
+    font-weight: 700;
+}
+.auth-footer a:hover { color: var(--accent); }
+
+/* Form layout helpers */
+.form-group { margin-bottom: 20px; }
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.form-row .form-group { margin-bottom: 0; }
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+.form-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border: 3px solid var(--black);
+    cursor: pointer;
+    margin: 0;
+}
+.form-checkbox label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--black);
+    cursor: pointer;
+}
+
+.w-100 { width: 100%; }
+
+/* ── Brutal card (universal container with thick border) ─────────────── */
+
+.brutal-card {
+    border: 3px solid var(--black);
+    background: var(--white);
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+/* Profile dl-list */
+.profile-list {
+    margin: 0 0 32px 0;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 16px 24px;
+}
+.profile-list dt {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    align-self: center;
+}
+.profile-list dd {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1.2;
+    margin: 0;
+    color: var(--black);
+    letter-spacing: 0.01em;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ── Brutal badges (статусы заказов) ─────────────────────────────────── */
+
+.brutal-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1;
+    border: 2px solid var(--black);
+    background: var(--white);
+    color: var(--black);
+}
+.brutal-badge-gray    { background: var(--gray); color: var(--black); }
+.brutal-badge-lime    { background: var(--lime); color: var(--black); }
+.brutal-badge-orange  { background: var(--orange); color: var(--white); }
+.brutal-badge-accent  { background: var(--accent); color: var(--lime); border-color: var(--accent); }
+.brutal-badge-success { background: var(--black); color: var(--lime); }
+
+/* ── Orders table (история заказов) ──────────────────────────────────── */
+
+.orders-table {
+    width: 100%;
+    border: 3px solid var(--black);
+    border-collapse: collapse;
+    background: var(--white);
+}
+.orders-table th {
+    background: var(--black);
+    color: var(--lime);
+    text-align: left;
+    padding: 14px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-bottom: 3px solid var(--black);
+}
+.orders-table th.text-end { text-align: right; }
+.orders-table td {
+    padding: 16px 20px;
+    border-top: 3px solid var(--black);
+    vertical-align: middle;
+}
+.orders-table tbody tr:first-child td { border-top: none; }
+.orders-table tbody tr { transition: background 0.2s; }
+.orders-table tbody tr:hover { background: var(--gray); }
+.orders-table td.order-id { font-family: 'Space Mono', monospace; font-size: 13px; }
+.orders-table td.order-id code {
+    background: var(--black);
+    color: var(--lime);
+    padding: 3px 8px;
+    font-size: 11px;
+}
+.orders-table td.order-total {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+}
+
+/* ── Access denied page ──────────────────────────────────────────────── */
+
+.access-denied {
+    text-align: center;
+    padding: 100px 40px;
+}
+.access-denied-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(120px, 18vw, 280px);
+    line-height: 0.85;
+    color: transparent;
+    -webkit-text-stroke: 4px var(--orange);
+    margin: 0 0 24px 0;
+    letter-spacing: -0.02em;
+}
+.access-denied-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--black);
+    margin: 0 0 16px 0;
+    letter-spacing: 0.02em;
+}
+.access-denied-desc {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 40px 0;
+}
+
+/* ── Mobile auth/profile fixes ───────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .auth-wrap { padding: 0; }
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+    .form-row .form-group { margin-bottom: 20px; }
+    .profile-list { grid-template-columns: 1fr; gap: 4px 0; }
+    .profile-list dt { margin-top: 12px; }
+    .brutal-card { padding: 20px; }
+    .orders-table th, .orders-table td { padding: 10px 8px; font-size: 12px; }
+    .orders-table td.order-total { font-size: 16px; }
+    .access-denied { padding: 60px 20px; }
 }
