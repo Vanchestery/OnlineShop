@@ -22,7 +22,8 @@ html, body {
     margin: 0;
     padding: 0;
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 body {
@@ -30,7 +31,6 @@ body {
     background: var(--white);
     color: var(--black);
     line-height: 1.6;
-    overflow-x: hidden;
 }
 
 /* Гарантируем что header/main/footer заполняют ширину при любых обстоятельствах
@@ -1145,6 +1145,7 @@ h1, h2, h3, h4, h5, h6, .heading {
 .brutal-form textarea,
 .brutal-form select {
     width: 100%;
+    max-width: 100%;
     border: 3px solid var(--black);
     background: var(--white);
     padding: 14px 16px;
@@ -1154,7 +1155,11 @@ h1, h2, h3, h4, h5, h6, .heading {
     outline: none;
     border-radius: 0;
     appearance: none;
+    /* Без min-width: 0 текстарея с длинным контентом forces parent-grid-item
+       расширяться → поля визуально вылезают за рамку формы. */
+    min-width: 0;
 }
+.brutal-form { max-width: 100%; }
 .brutal-form input:focus,
 .brutal-form textarea:focus,
 .brutal-form select:focus {
@@ -1352,7 +1357,9 @@ h1, h2, h3, h4, h5, h6, .heading {
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 20px;
+    max-width: 100%;
 }
+.form-row > * { min-width: 0; max-width: 100%; }
 .form-row .form-group { margin-bottom: 0; }
 
 .form-checkbox {
@@ -1931,7 +1938,12 @@ h1, h2, h3, h4, h5, h6, .heading {
     grid-template-columns: 2fr 1fr;
     gap: 24px;
     margin-bottom: 24px;
+    max-width: 100%;
 }
+/* Каждое непосредственное дочернее div admin-form-grid должно иметь
+   min-width: 0 чтобы grid-колонка могла сжиматься меньше min-content
+   своего самого широкого ребёнка (textarea, длинный текст). */
+.admin-form-grid > * { min-width: 0; max-width: 100%; }
 
 .admin-image-preview {
     border: 3px solid var(--black);
@@ -1967,7 +1979,9 @@ h1, h2, h3, h4, h5, h6, .heading {
     grid-template-columns: 1fr 1fr;
     gap: 24px;
     margin-bottom: 24px;
+    max-width: 100%;
 }
+.admin-card-grid > * { min-width: 0; max-width: 100%; }
 .admin-subhead {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 28px;
@@ -2000,32 +2014,96 @@ h1, h2, h3, h4, h5, h6, .heading {
 }
 
 @media (max-width: 768px) {
-    .admin-header { padding: 0 16px; height: 50px; }
+    .admin-header {
+        padding: 0 16px;
+        height: 50px;
+        max-width: 100vw;
+        overflow: hidden;
+    }
     .admin-logo { font-size: 22px; }
     .admin-logo-badge { font-size: 9px; padding: 1px 6px; }
+    .admin-header-back { font-size: 9px; letter-spacing: 0.05em; }
 
-    .admin-layout { grid-template-columns: 1fr; }
+    .admin-layout {
+        grid-template-columns: 1fr;
+        /* Явно: sidebar (row 1) = auto-content, main (row 2) = забирает всё остальное.
+           Без grid-template-rows Chrome stretch'ит лишнюю высоту min-height в обе
+           строки, sidebar вырастает в пустую чёрную полосу под меню. */
+        grid-template-rows: auto 1fr;
+        max-width: 100vw;
+    }
     .admin-sidebar {
         padding: 0;
         border-right: none;
         border-bottom: 3px solid var(--black);
+        max-width: 100vw;
+        overflow: hidden;
+        align-self: start;  /* подстраховка — не растягиваться вертикально */
     }
-    .admin-menu { display: flex; overflow-x: auto; }
+    .admin-menu {
+        display: flex;
+        overflow-x: auto;
+        max-width: 100vw;
+    }
     .admin-menu-item {
         padding: 12px 18px;
         border-left: none;
         border-bottom: 4px solid transparent;
         white-space: nowrap;
         font-size: 10px;
+        flex-shrink: 0;
     }
     .admin-menu-item:hover,
     .admin-menu-item.is-active {
         border-left: none;
         border-bottom-color: var(--lime);
     }
-    .admin-main { padding: 20px 16px; }
-    .admin-section-title { font-size: 32px; }
+    .admin-main {
+        padding: 20px 16px;
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+
+    /* Section-head — на mobile в столбик, иначе длинные заголовки + кнопки
+       вылезают за viewport и тянут body на горизонтальный скролл. */
+    .admin-section-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+    .admin-section-title {
+        font-size: 28px;
+        word-break: break-word;
+        max-width: 100%;
+        line-height: 1.05;
+    }
+    .admin-section-title .count {
+        display: inline-block;
+        margin-left: 8px;
+    }
+    .admin-subhead-meta {
+        word-break: break-word;
+        letter-spacing: 0.15em;
+    }
+    .admin-subhead { font-size: 22px; }
+
+    .admin-filter-row {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    .admin-filter-row .tag { flex-shrink: 0; }
+
     .admin-table th, .admin-table td { padding: 8px 6px; font-size: 11px; }
     .admin-table th { font-size: 9px; letter-spacing: 0.1em; }
     .admin-thumb, .admin-thumb-placeholder { width: 36px; height: 36px; }
+
+    .admin-actions-cell { gap: 4px; }
+    .admin-actions-cell .btn-brutal-sm { padding: 6px 10px; font-size: 9px; }
+
+    /* admin-form-grid и card-grid — уже 1fr на mobile через 992 breakpoint,
+       но дополнительно ограничиваем чтобы long inputs не пушили layout. */
+    .admin-form-grid, .admin-card-grid { max-width: 100%; }
+    .brutal-card { max-width: 100%; }
 }
