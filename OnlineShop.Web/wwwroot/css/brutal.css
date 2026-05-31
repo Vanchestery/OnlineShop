@@ -1170,6 +1170,30 @@ h1, h2, h3, h4, h5, h6, .heading {
     padding-right: 40px;
 }
 
+/* File-input: стилизуем псевдо-кнопку через ::file-selector-button.
+   Текст "Файл не выбран" — native, не трогаем, он рядом с нашей кнопкой. */
+.brutal-form input[type="file"] {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+.brutal-form input[type="file"]::file-selector-button {
+    background: var(--black);
+    color: var(--lime);
+    border: none;
+    padding: 10px 20px;
+    margin-right: 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+.brutal-form input[type="file"]::file-selector-button:hover {
+    background: var(--accent);
+}
+
 .brutal-form .text-danger,
 .brutal-form .field-validation-error {
     font-family: 'Space Mono', monospace;
@@ -1784,6 +1808,24 @@ h1, h2, h3, h4, h5, h6, .heading {
 .admin-main {
     padding: 40px;
     background: var(--white);
+    /* min-width: 0 разрешает grid-item сжиматься меньше content-width.
+       Без этого широкая таблица заставит main расширяться, ломая sticky-header
+       при горизонтальной прокрутке. */
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+/* Wrapper для таблиц с горизонтальным скроллом — на mobile широкая admin-table
+   уходит в скролл ВНУТРИ контейнера, а не пушит весь page-layout. */
+.admin-table-wrap {
+    overflow-x: auto;
+    border: 3px solid var(--black);
+    background: var(--white);
+    -webkit-overflow-scrolling: touch;
+}
+.admin-table-wrap .admin-table {
+    border: none;
+    margin: 0;
 }
 
 .admin-section-head {

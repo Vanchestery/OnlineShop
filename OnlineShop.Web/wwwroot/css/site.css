@@ -1,54 +1,10 @@
-/* Кастомные стили проекта. Базовый дизайн — Bootstrap 5 через CDN (см. _Layout). */
+/* ─────────────────────────────────────────────────────────────────
+   Файл сохранён для совместимости (в Phase 10 brutal-redesign все
+   стили переехали в brutal.css). Не подключается ни одним _Layout.
 
-html {
-    position: relative;
-    min-height: 100%;
-}
+   Если планируешь оставить только брутал-дизайн навсегда — этот
+   файл можно безопасно удалить.
 
-body {
-    margin-bottom: 60px;
-}
-
-/* ── Карточка товара в каталоге ─────────────────────────────── */
-
-.product-card {
-    transition: box-shadow .15s ease, transform .15s ease;
-    border: 1px solid #e6e6e6;
-}
-
-.product-card:hover {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .08);
-    transform: translateY(-2px);
-}
-
-.product-image {
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-}
-
-.product-image-placeholder {
-    aspect-ratio: 4 / 3;
-    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-    font-size: 3rem;
-    font-weight: 600;
-    user-select: none;
-}
-
-.product-image-placeholder-lg {
-    aspect-ratio: 1 / 1;
-    font-size: 6rem;
-    border-radius: .5rem;
-}
-
-/* ── Валидация форм ──────────────────────────────────────────
-   ASP.NET Core рендерит asp-validation-summary с классом
-   "validation-summary-valid" когда нет ошибок и
-   "validation-summary-errors" когда есть. Скрываем "valid" чтобы
-   не показывать пустую красную плашку. */
-.validation-summary-valid {
-    display: none;
-}
+   Если возможен fallback на Bootstrap-стиль (например A/B тест) —
+   оставь как есть, восстановление займёт 1 строку в _Layout.
+   ───────────────────────────────────────────────────────────────── */
