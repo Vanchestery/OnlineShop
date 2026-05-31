@@ -3,24 +3,27 @@
     ViewData["Title"] = "Профиль";
 }
 
-<div class="row">
-    <div class="col-md-8">
-        <h1 class="h3 mb-4">Профиль</h1>
+<section class="section-divider">
+    <div class="section-head">
+        <h2 class="section-title">ПРОФИЛЬ<span class="accent">.</span></h2>
+        <div class="label-mono text-brutal-muted">★ Личный аккаунт</div>
+    </div>
 
-        <dl class="row">
-            <dt class="col-sm-3">Имя</dt>
-            <dd class="col-sm-9">@Model.FullName</dd>
+    <div class="brutal-card">
+        <dl class="profile-list">
+            <dt>Имя</dt>
+            <dd>@Model.FullName</dd>
 
-            <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9">@Model.Email</dd>
+            <dt>Email</dt>
+            <dd>@Model.Email</dd>
 
-            <dt class="col-sm-3">Зарегистрирован</dt>
-            <dd class="col-sm-9">@Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</dd>
+            <dt>Регистрация</dt>
+            <dd>@Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy")</dd>
         </dl>
 
-        <div class="mt-4 d-flex gap-2">
-            <a asp-action="ChangePassword" class="btn btn-outline-dark">Сменить пароль</a>
-            <a asp-action="OrderHistory" class="btn btn-outline-secondary">Мои заказы</a>
+        <div class="profile-actions">
+            <a asp-action="ChangePassword" class="btn-brutal btn-brutal-outline">Сменить пароль</a>
+            <a asp-action="OrderHistory" class="btn-brutal">Мои заказы →</a>
         </div>
     </div>
-</div>
+</section>
