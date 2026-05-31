@@ -1,25 +1,123 @@
 @model IReadOnlyList<OnlineShop.Web.ViewModels.Catalog.ProductCardViewModel>
+@using OnlineShop.Web.Helpers
+@inject IWebHostEnvironment Env
 @{
     ViewData["Title"] = "Главная";
+    var isAuth = User.Identity?.IsAuthenticated == true;
+    // Проверяем что hero.jpg существует — без этого получили бы либо broken-image,
+    // либо громоздкий onerror с экранированием кавычек.
+    var heroPath = System.IO.Path.Combine(Env.WebRootPath, "images", "hero.jpg");
+    var heroExists = System.IO.File.Exists(heroPath);
 }
 
-<section class="hero text-center py-5 mb-5 bg-light rounded-3">
-    <h1 class="display-4 fw-bold">OnlineShop</h1>
-    <p class="lead text-muted mb-4">Кофе, чай и всё для уютного утра.</p>
-    <a asp-controller="Product" asp-action="Index" class="btn btn-dark btn-lg px-4">
-        Открыть каталог
-    </a>
+@* ─── HERO ───────────────────────────────────────────────────────── *@
+<section class="hero">
+    <div class="hero-left">
+        <div class="hero-eyebrow">Specialty Coffee · Tea · Brewing</div>
+        <h1 class="hero-title">
+            <span class="solid">ПЕЙ</span>
+            <span class="outline">ЛУЧШЕЕ</span>
+            <span class="solid">КАЖДЫЙ</span>
+            <span class="solid">ДЕНЬ</span>
+        </h1>
+        <p class="hero-desc">
+            Specialty кофе из Эфиопии, Колумбии и Кении.
+            Чай из Японии и Китая. Аксессуары для идеального ритуала.
+            Доставка по всей России за 24 часа.
+        </p>
+        <div class="cta-row">
+            <a asp-controller="Product" asp-action="Index" class="btn-brutal">Открыть каталог</a>
+            @if (isAuth)
+            {
+                <a asp-controller="Favourite" asp-action="Index" class="btn-brutal btn-brutal-outline">Избранное</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn-brutal btn-brutal-outline">Регистрация</a>
+            }
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <div class="hero-img-wrap">
+            @if (heroExists)
+            {
+                <img src="~/images/hero.jpg" alt="BREWCO" />
+                <div class="hero-img-overlay"></div>
+            }
+            else
+            {
+                <div class="hero-img-fallback">BREWCO</div>
+            }
+            <div class="hero-img-label">EST.<br />2026</div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-num">20</span>
+                <span class="stat-label">Товаров</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num">4</span>
+                <span class="stat-label">Категории</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num">24H</span>
+                <span class="stat-label">Доставка</span>
+            </div>
+        </div>
+    </div>
 </section>
 
-@if (Model.Count > 0)
-{
-    <h2 class="h4 mb-3">Популярное</h2>
-    <div class="row g-4">
-        @foreach (var item in Model)
+@* ─── ПОПУЛЯРНОЕ ─────────────────────────────────────────────────── *@
+<section class="section-divider">
+    <div class="section-head">
+        <h2 class="section-title">ПОПУЛЯРНОЕ<span class="accent">.</span></h2>
+        <a asp-controller="Product" asp-action="Index" class="tag">Все товары →</a>
+    </div>
+
+    <div class="products-grid">
+        @for (var i = 0; i < Model.Count; i++)
         {
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <partial name="_ProductCard" model="item" />
+            var item = Model[i];
+            var num = (i + 1).ToString("D3");
+            var detailsUrl = Url.Action("Details", "Product", new { id = item.Id });
+            <div class="product-card">
+                <a class="product-card-main" href="@detailsUrl">
+                    <div class="product-img-wrap">
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="@item.ImagePath" alt="@item.Name" />
+                        }
+                        else
+                        {
+                            <div class="product-img-placeholder">
+                                @(item.Name.Length > 0 ? item.Name.Substring(0, 1).ToUpper() : "?")
+                            </div>
+                        }
+                        <span class="product-num">№ @num · @item.Category.ToRussian()</span>
+                    </div>
+                    <div class="product-body">
+                        <h3 class="product-name">@item.Name</h3>
+                        <p class="product-desc">@item.Category.ToRussian()</p>
+                    </div>
+                </a>
+                <div class="product-footer">
+                    <div class="price">@item.Price.ToString("N0") ₽</div>
+                    @if (item.IsAvailable)
+                    {
+                        <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
+                            <input type="hidden" name="productId" value="@item.Id" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <input type="hidden" name="returnUrl" value="/" />
+                            <button type="submit" class="add-btn" title="В корзину">+</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button type="button" class="add-btn" disabled title="Недоступен">−</button>
+                    }
+                </div>
             </div>
         }
     </div>
-}
+</section>
