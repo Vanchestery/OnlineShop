@@ -29,12 +29,25 @@ public class HomeController : Controller
         return View(featured);
     }
 
+    /// <summary>
+    /// Универсальная error-страница для 404 и 500.
+    /// — При 404: middleware StatusCodePagesWithReExecute переадресует сюда
+    ///   с query-параметром ?statusCode=404.
+    /// — При 500: UseExceptionHandler("/Home/Error") выставляет
+    ///   HttpContext.Response.StatusCode = 500 перед re-execute, и берётся оттуда.
+    /// </summary>
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(int? statusCode)
     {
+        var code = statusCode ?? HttpContext.Response.StatusCode;
+        if (code < 400) code = 500;  // на случай если status ещё не выставлен
+
+        Response.StatusCode = code;
+
         return View(new ErrorViewModel
         {
-            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+            StatusCode = code
         });
     }
 }

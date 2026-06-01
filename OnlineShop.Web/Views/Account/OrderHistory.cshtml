@@ -1,5 +1,6 @@
 @model OnlineShop.Web.ViewModels.Auth.OrderHistoryViewModel
 @using OnlineShop.Web.Helpers
+@using static OnlineShop.Web.Helpers.RussianPluralizer
 @{
     ViewData["Title"] = "Мои заказы";
 }
@@ -8,8 +9,7 @@
     <div class="section-head">
         <h2 class="section-title">МОИ ЗАКАЗЫ<span class="accent">.</span></h2>
         <div class="label-mono text-brutal-muted">
-            ★ @Model.Orders.Count
-            @(Model.Orders.Count == 1 ? "заказ" : Model.Orders.Count < 5 ? "заказа" : "заказов")
+            ★ @Model.Orders.Count @RussianPluralizer.Orders(Model.Orders.Count)
         </div>
     </div>
 

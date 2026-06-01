@@ -1,4 +1,5 @@
 @model OnlineShop.Web.ViewModels.Reviews.ProductReviewsViewModel
+@using OnlineShop.Web.Helpers
 @{
     var fullStars = (int)Math.Round(Model.AverageRating);
     var emptyStars = 5 - fullStars;
@@ -12,7 +13,7 @@
         {
             <div>
                 <div class="avg-rating-num">@Model.AverageRating.ToString("0.0")</div>
-                <div class="avg-rating-meta">★ из 5 / @Model.Count @(Model.Count == 1 ? "отзыв" : Model.Count < 5 ? "отзыва" : "отзывов")</div>
+                <div class="avg-rating-meta">★ из 5 / @Model.Count @RussianPluralizer.Reviews(Model.Count)</div>
             </div>
         }
         else

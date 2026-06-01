@@ -97,6 +97,11 @@ try
         app.UseHsts();
     }
 
+    // 404 (и любые другие 4xx/5xx без тела ответа) перехватываются
+    // StatusCodePagesWithReExecute и переадресуются на /Home/Error с query-параметром.
+    // Re-execute сохраняет оригинальный URL — в логах видно что было запрошено.
+    app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
+
     // Локаль: парсим числа всегда с точкой (en-US), но UI на русском (ru-RU).
     // Без этого jquery-validation в браузере и model binding на сервере ждут
     // разных форматов decimal — невозможно ввести цену вроде 1290.50.

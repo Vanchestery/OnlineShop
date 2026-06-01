@@ -1,4 +1,5 @@
 @model OnlineShop.Web.ViewModels.Favourites.FavouriteListViewModel
+@using OnlineShop.Web.Helpers
 @{
     ViewData["Title"] = "Избранное";
 }
@@ -7,8 +8,7 @@
     <div class="section-head">
         <h2 class="section-title">ИЗБРАННОЕ<span class="accent">.</span></h2>
         <div class="label-mono text-brutal-muted">
-            ★ @Model.Items.Count
-            @(Model.Items.Count == 1 ? "товар" : Model.Items.Count < 5 ? "товара" : "товаров")
+            ★ @Model.Items.Count @RussianPluralizer.Products(Model.Items.Count)
         </div>
     </div>
 

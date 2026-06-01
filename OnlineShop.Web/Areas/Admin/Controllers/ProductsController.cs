@@ -84,7 +84,8 @@ public class ProductsController : Controller
 
         try
         {
-            var imagePath = await SaveImageAsync(model.ImageFile) ?? model.ExistingImagePath;
+            var newImagePath = await SaveImageAsync(model.ImageFile);
+            var imagePath = newImagePath ?? model.ExistingImagePath;
             var dto = new ProductDto
             {
                 Id = model.Id.Value,
@@ -96,6 +97,14 @@ public class ProductsController : Controller
                 ImagePath = imagePath
             };
             await _productService.UpdateAsync(model.Id.Value, dto, ct);
+
+            // Если admin загрузил новую картинку — старая стала orphan'ом, удаляем.
+            if (newImagePath is not null
+                && !string.IsNullOrEmpty(model.ExistingImagePath)
+                && model.ExistingImagePath != newImagePath)
+            {
+                TryDeleteImageFile(model.ExistingImagePath);
+            }
             TempData["StatusMessage"] = "Товар обновлён.";
             return RedirectToAction(nameof(Index));
         }
@@ -110,9 +119,20 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
     {
+        // Получаем DTO перед удалением — нужен путь к картинке для cleanup.
+        var dto = await _productService.GetByIdAsync(id, ct);
+
         try
         {
             await _productService.DeleteAsync(id, ct);
+
+            // Удаляем физический файл картинки с диска. Делаем после успешного
+            // DeleteAsync — если БД отказала по FK, файл не трогаем.
+            if (dto is not null && !string.IsNullOrEmpty(dto.ImagePath))
+            {
+                TryDeleteImageFile(dto.ImagePath);
+            }
+
             TempData["StatusMessage"] = "Товар удалён.";
         }
         catch (Exception ex)
@@ -124,6 +144,27 @@ public class ProductsController : Controller
                                         "Откройте редактирование и снимите галочку «Доступен к покупке».";
         }
         return RedirectToAction(nameof(Index));
+    }
+
+    /// <summary>
+    /// Физическое удаление файла из wwwroot/. Тихо ловим ошибки —
+    /// orphaned-файл не катастрофа, основная операция уже прошла.
+    /// </summary>
+    private void TryDeleteImageFile(string relativePath)
+    {
+        var fullPath = Path.Combine(_env.WebRootPath, relativePath.TrimStart('/'));
+        try
+        {
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+                _logger.LogInformation("Deleted image file {Path}", fullPath);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to delete image file {Path}", fullPath);
+        }
     }
 
     /// <summary>

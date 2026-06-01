@@ -1,22 +1,19 @@
 @model ErrorViewModel
 @{
-    ViewData["Title"] = "Ошибка";
+    ViewData["Title"] = Model.Title;
 }
 
-<h1 class="text-danger">Ошибка</h1>
-<h2 class="text-danger">Произошла ошибка при обработке запроса.</h2>
+<section class="section-divider access-denied">
+    <h1 class="access-denied-num">@Model.StatusCode</h1>
+    <p class="access-denied-text">@Model.Title</p>
+    <p class="access-denied-desc">★ @Model.Description</p>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+    @if (Model.ShowRequestId)
+    {
+        <p class="access-denied-desc" style="margin-bottom: 24px;">
+            ★ Request ID: <code style="background: var(--black); color: var(--lime); padding: 2px 6px;">@Model.RequestId</code>
+        </p>
+    }
 
-<h3>Режим разработки</h3>
-<p>
-    Переключение в режим <strong>Development</strong> покажет подробную информацию об ошибке.
-</p>
-<p>
-    <strong>Не включайте режим разработки в продакшене.</strong>
-</p>
+    <a asp-controller="Home" asp-action="Index" class="btn-brutal btn-brutal-lg">На главную</a>
+</section>
