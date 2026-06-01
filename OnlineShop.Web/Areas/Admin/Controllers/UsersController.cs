@@ -56,6 +56,20 @@ public class UsersController : Controller
         var current = await _userManager.GetRolesAsync(user);
         var desired = rolesAssignment.SelectedRoles ?? [];
 
+        // Self-lock guard: админ не может сам снять с себя роль Admin —
+        // иначе мгновенно теряет доступ к админке после следующего refresh
+        // security stamp. Если кто-то другой админ есть в системе, пусть он снимет.
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser is not null
+            && currentUser.Id == user.Id
+            && current.Contains(RoleNames.Admin)
+            && !desired.Contains(RoleNames.Admin))
+        {
+            _logger.LogWarning("Admin {Email} tried to remove own Admin role — blocked", currentUser.Email);
+            TempData["StatusMessage"] = "Нельзя снять с себя роль Admin — попросите другого администратора.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
         var toAdd = desired.Except(current).ToList();
         var toRemove = current.Except(desired).ToList();
 
