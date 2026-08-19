@@ -2,10 +2,12 @@
 
 > Онлайн-магазин кофе, чая и аксессуаров. ASP.NET Core 9 MVC. Brutalist Modern UI.
 
+[![CI](https://github.com/Vanchestery/OnlineShop/actions/workflows/ci.yml/badge.svg)](https://github.com/Vanchestery/OnlineShop/actions/workflows/ci.yml)
 ![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker)
 ![Tests](https://img.shields.io/badge/tests-30%20passing-success?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Pet-проект уровня portfolio: полноценный e-commerce с покупательским и админским
 интерфейсом, реальными бизнес-сценариями (анонимная корзина с merge на login,
@@ -317,7 +319,7 @@ GitHub Actions конфигурация в `.github/workflows/ci.yml`:
 
 ## Лицензия
 
-MIT (для pet-проекта). Картинки товаров и hero-фото — с Unsplash, свободные для
+[MIT](LICENSE) © 2026. Картинки товаров и hero-фото — с Unsplash, свободные для
 коммерческого использования без attribution.
 
 ---
