@@ -1,3 +1,52 @@
+# BREWCO
+> Online shop for coffee, tea, and accessories. ASP.NET Core 9 MVC. Brutalist Modern UI.
+[![CI](https://github.com/Vanchestery/OnlineShop/actions/workflows/ci.yml/badge.svg)](https://github.com/Vanchestery/OnlineShop/actions/workflows/ci.yml)
+![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker)
+![Tests](https://img.shields.io/badge/tests-30%20passing-success?style=flat-square)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+Portfolio-level pet project: full e-commerce with customer and admin UIs, real business flows (anonymous cart with merge on login, frozen price snapshot in orders, catalog search/filters), 30 unit tests, and a Brutalist Modern theme.
+## Screenshots
+| Home | Catalog | Product details |
+|------|---------|-----------------|
+| ![Home](docs/screenshots/home.png) | ![Catalog](docs/screenshots/catalog.png) | ![Details](docs/screenshots/details.png) |
+| Cart | Checkout | Admin |
+|------|----------|-------|
+| ![Cart](docs/screenshots/cart.png) | ![Checkout](docs/screenshots/checkout.png) | ![Admin](docs/screenshots/admin.png) |
+## Stack
+**Backend**
+- ASP.NET Core 9 MVC + Razor Views
+- Entity Framework Core 9 + Npgsql
+- PostgreSQL 16 (Docker Compose)
+- ASP.NET Core Identity (auth, roles, policies)
+- AutoMapper 14 (Entity ↔ DTO)
+- Serilog (structured JSON file logging)
+**Frontend**
+- Razor Views with Tag Helpers
+- Bootstrap 5 (grid/flex utilities only)
+- Custom Brutalist Modern CSS (`wwwroot/css/brutal.css`)
+- Google Fonts: Bebas Neue (headings), Space Mono (labels), DM Sans (body)
+**Tests & DevOps**
+- xUnit 2.9 + Moq 4.20 + FluentAssertions 6.12
+- GitHub Actions CI (build + test on every push/PR)
+- Docker Compose for PostgreSQL
+## Architecture
+Layered solution:
+```
+OnlineShop.sln
+├── OnlineShop.Db/      — entities, ApplicationDbContext, migrations,
+│                         IEntityTypeConfiguration, storage interfaces/impls,
+│                         IdentityInitializer for seeding
+├── OnlineShop.Core/    — DTOs, business services, AutoMapper profiles, request objects
+├── OnlineShop.Web/     — controllers, ViewModels, Views, ViewComponents,
+│                         Admin Area, Infrastructure (CartContext), Helpers
+└── OnlineShop.Tests/   — service unit tests with mocks
+```
+**Project references** (arrow = “depends on”):
+```
+Web   ──→ Core ──→ Db
+Tests ──→ Core
 ```
 Classic **layered (N-tier)** architecture: upper layers depend on lower ones; lower layers do not know about upper ones.
 **Architecture guard:** `Web` does **not** reference `Db` directly — injecting `IProductsStorage` into a controller will not compile, so you go through `Core` services.
